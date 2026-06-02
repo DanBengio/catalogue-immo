@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue Immobilier</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--cream:#f5f0e8;--dark:#1a1a1a;--gold:#c4a45a;--gold-light:#e8d5a3;--mid:#6b6560;--border:#e2ddd5}
+body{background:var(--cream);font-family:'DM Sans',sans-serif;color:var(--dark);min-height:100vh}
+header{background:var(--dark);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold)}
+header h1{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400;color:var(--gold-light);letter-spacing:0.08em}
+header span{font-size:0.75rem;color:#888;letter-spacing:0.12em;text-transform:uppercase}
+.filters{background:white;border-bottom:1px solid var(--border);padding:16px 40px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.filter-group{display:flex;flex-direction:column;gap:4px}
+.filter-group label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--mid);font-weight:500}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:white;font-size:0.78rem;cursor:pointer;transition:all 0.2s;color:var(--mid);font-family:'DM Sans',sans-serif}
+.chip.active{background:var(--dark);color:white;border-color:var(--dark)}
+.chip:hover:not(.active){border-color:var(--gold);color:var(--dark)}
+select{border:1px solid var(--border);border-radius:4px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:0.83rem;background:white;color:var(--dark);cursor:pointer;outline:none;min-width:140px}
+select:focus{border-color:var(--gold)}
+.count{margin-left:auto;font-size:0.8rem;color:var(--mid)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;padding:32px 40px;max-width:1400px;margin:0 auto}
+.card{background:white;border-radius:8px;overflow:hidden;border:1px solid var(--border);transition:transform 0.25s,box-shadow 0.25s;cursor:pointer}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(0,0,0,0.09)}
+.card.hidden{display:none}
+.card-img{height:210px;background-size:cover;background-position:center;background-color:#e8e4dc;position:relative}
+.card-img-placeholder{height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#ccc}
+.badge{position:absolute;top:12px;left:12px;padding:4px 12px;border-radius:3px;font-size:0.68rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase}
+.badge-vente{background:var(--dark);color:white}
+.badge-location{background:var(--gold);color:white}
+.card-body{padding:18px}
+.card-ref{font-size:0.68rem;color:var(--mid);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:10px;line-height:1.3}
+.card-price{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);margin-bottom:12px}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tag{background:var(--cream);border:1px solid var(--border);border-radius:3px;padding:3px 8px;font-size:0.73rem;color:var(--mid)}
+.card-amenities{display:flex;gap:10px;font-size:0.78rem;color:var(--mid);border-top:1px solid var(--border);padding-top:12px;margin-top:4px}
+.amenity.on{color:var(--dark);font-weight:500}
+.card-actions{display:flex;gap:8px;margin-top:14px}
+.btn-fiche{flex:1;padding:9px;background:var(--dark);color:white;border:none;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.78rem;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center}
+.btn-fiche:hover{background:#333}
+.btn-link{padding:9px 14px;background:var(--cream);color:var(--dark);border:1px solid var(--border);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.btn-link:hover{border-color:var(--gold);background:var(--gold-light)}
+.btn-link.copied{background:var(--gold);color:white;border-color:var(--gold)}
+.no-results{text-align:center;padding:80px;color:var(--mid);font-family:'Cormorant Garamond',serif;font-size:1.3rem;grid-column:1/-1}
+.loading{text-align:center;padding:80px;grid-column:1/-1}
+.loader{display:inline-block;width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:600px){header{padding:16px}.filters{padding:12px 16px}.grid{padding:16px;grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Catalogue Immobilier</h1>
+  <span id="headerCount">Casablanca · Biens Premium</span>
+</header>
+<div class="filters">
+  <div class="filter-group">
+    <label>Transaction</label>
+    <div class="chips" id="ct">
+      <button class="chip active" data-val="">Tous</button>
+      <button class="chip" data-val="Vente">Vente</button>
+      <button class="chip" data-val="Location">Location</button>
+    </div>
+  </div>
+  <div class="filter-group">
+    <label>Type</label>
+    <div class="chips" id="ctype">
+      <button class="chip active" data-val="">Tous</button>
+      <button class="chip" data-val="Villa">Villa</button>
+      <button class="chip" data-val="Appartement">Appartement</button>
+    </div>
+  </div>
+  <div class="filter-group">
+    <label>Quartier</label>
+    <select id="fq"><option value="">Tous</option></select>
+  </div>
+  <div class="filter-group">
+    <label>Chambres min.</label>
+    <select id="fc">
+      <option value="0">Toutes</option>
+      <option value="2">2+</option><option value="3">3+</option>
+      <option value="4">4+</option><option value="5">5+</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Équipements</label>
+    <div class="chips">
+      <button class="chip" data-eq="piscine">🏊 Piscine</button>
+      <button class="chip" data-eq="garage">🚗 Garage</button>
+      <button class="chip" data-eq="jardin">🌿 Jardin</button>
+    </div>
+  </div>
+  <span class="count" id="count"></span>
+</div>
+<div class="grid" id="grid"><div class="loading"><div class="loader"></div></div></div>
+
+<script>
+const SUPABASE_URL='https://tfblsliwbsmxpcqnpqwo.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmYmxzbGl3YnNteHBjcW5wcXdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MTIxODUsImV4cCI6MjA5NTk4ODE4NX0.if4QBEF1VBWMTdSwLHy-H0SmhWD_3twYO9qQrC2t7VQ';
+const BASE_URL='https://danbengio.github.io/catalogue-immo';
+const H={'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY};
+let allBiens=[], allPhotos=[];
+let filters={transaction:'',type:'',quartier:'',chambres:0,piscine:false,garage:false,jardin:false};
+
+async function load(){
+  try{
+    const [b,p]=await Promise.all([
+      fetch(SUPABASE_URL+'/rest/v1/biens?select=*&order=created_at.desc',{headers:H}).then(r=>r.json()),
+      fetch(SUPABASE_URL+'/rest/v1/photos?select=*&order=ordre.asc',{headers:H}).then(r=>r.json())
+    ]);
+    allBiens=b; allPhotos=p;
+    // Quartiers
+    const qs=[...new Set(b.map(x=>x.quartier).filter(Boolean))].sort();
+    const fq=document.getElementById('fq');
+    qs.forEach(q=>{const o=document.createElement('option');o.value=o.textContent=q;fq.appendChild(o);});
+    document.getElementById('headerCount').textContent=`Casablanca · ${b.length} biens`;
+    renderGrid();
+  }catch(e){document.getElementById('grid').innerHTML=`<div class="no-results">Erreur de chargement</div>`;}
+}
+
+function renderGrid(){
+  const filtered=allBiens.filter(b=>{
+    if(filters.transaction&&b.transaction!==filters.transaction)return false;
+    if(filters.type&&b.type_bien!==filters.type)return false;
+    if(filters.quartier&&b.quartier!==filters.quartier)return false;
+    if(filters.chambres&&(b.chambres||0)<filters.chambres)return false;
+    if(filters.piscine&&!b.piscine)return false;
+    if(filters.garage&&!b.garage)return false;
+    if(filters.jardin&&!b.jardin)return false;
+    return true;
+  });
+  document.getElementById('count').textContent=filtered.length+' bien'+(filtered.length>1?'s':'')+' trouvé'+(filtered.length>1?'s':'');
+  const grid=document.getElementById('grid');
+  if(!filtered.length){grid.innerHTML='<div class="no-results">Aucun bien ne correspond</div>';return;}
+  grid.innerHTML=filtered.map(b=>{
+    const photos=allPhotos.filter(p=>p.bien_id===b.id);
+    const mainPhoto=photos[0]?.url;
+    const prix=b.transaction==='Location'?(b.prix||0).toLocaleString('fr-FR')+' / mois':(b.prix||0).toLocaleString('fr-FR');
+    const ficheUrl=`${BASE_URL}/fiche.html?id=${encodeURIComponent(b.reference)}`;
+    return `<div class="card">
+      <div class="card-img" style="${mainPhoto?`background-image:url('${mainPhoto}')`:'background:#e8e4dc'}">
+        ${!mainPhoto?'<div class="card-img-placeholder">🏠</div>':''}
+        <span class="badge badge-${b.transaction.toLowerCase()}">${b.transaction}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-ref">${b.reference||''}</div>
+        <div class="card-title">${b.nom||''}</div>
+        <div class="card-price">${prix} MAD</div>
+        <div class="card-tags">
+          ${b.quartier?`<span class="tag">📍 ${b.quartier}</span>`:''}
+          ${b.surface_hab?`<span class="tag">📐 ${b.surface_hab} m²</span>`:''}
+          ${b.chambres?`<span class="tag">🛏 ${b.chambres} ch.</span>`:''}
+          ${b.salles_de_bain?`<span class="tag">🚿 ${b.salles_de_bain} SDB</span>`:''}
+        </div>
+        <div class="card-amenities">
+          <span class="amenity ${b.piscine?'on':''}">🏊</span>
+          <span class="amenity ${b.garage?'on':''}">🚗</span>
+          <span class="amenity ${b.jardin?'on':''}">🌿</span>
+        </div>
+        <div class="card-actions">
+          <a href="${ficheUrl}" target="_blank" class="btn-fiche">Voir la fiche</a>
+          <button class="btn-link" onclick="copyLink('${ficheUrl}',this)">🔗 Copier le lien</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Filtres
+document.querySelectorAll('#ct .chip').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('#ct .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');
+  filters.transaction=c.dataset.val;renderGrid();
+}));
+document.querySelectorAll('#ctype .chip').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('#ctype .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');
+  filters.type=c.dataset.val;renderGrid();
+}));
+document.getElementById('fq').addEventListener('change',e=>{filters.quartier=e.target.value;renderGrid();});
+document.getElementById('fc').addEventListener('change',e=>{filters.chambres=parseInt(e.target.value);renderGrid();});
+document.querySelectorAll('[data-eq]').forEach(btn=>btn.addEventListener('click',()=>{
+  const eq=btn.dataset.eq;filters[eq]=!filters[eq];btn.classList.toggle('active',filters[eq]);renderGrid();
+}));
+
+function copyLink(url,btn){
+  navigator.clipboard.writeText(url);
+  btn.textContent='✅ Copié !';btn.classList.add('copied');
+  setTimeout(()=>{btn.textContent='🔗 Copier le lien';btn.classList.remove('copied');},2500);
+}
+
+load();
+</script>
+</body>
+</html>

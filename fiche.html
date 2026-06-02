@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche Bien — Catalogue Immobilier</title>
+<meta property="og:title" content="Bien immobilier">
+<meta property="og:description" content="Consultez la fiche de ce bien immobilier">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--cream:#f5f0e8;--dark:#1a1a1a;--gold:#c4a45a;--gold-light:#e8d5a3;--mid:#6b6560;--border:#e2ddd5}
+body{background:var(--cream);font-family:'DM Sans',sans-serif;color:var(--dark);min-height:100vh}
+.header{background:var(--dark);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold)}
+.header h1{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;color:var(--gold-light);letter-spacing:0.1em}
+.header-btns{display:flex;gap:10px;align-items:center}
+.badge{padding:5px 14px;border-radius:3px;font-size:0.7rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase}
+.badge-vente{background:white;color:var(--dark)}
+.badge-location{background:var(--gold);color:white}
+.btn-pdf{padding:9px 18px;background:var(--gold);color:white;border:none;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:background 0.2s}
+.btn-pdf:hover{background:#b8943e}
+.container{max-width:900px;margin:0 auto;padding:36px 24px}
+
+/* CAROUSEL */
+.carousel{position:relative;height:500px;border-radius:10px;overflow:hidden;background:#ddd;margin-bottom:32px;box-shadow:0 4px 24px rgba(0,0,0,0.12)}
+.carousel img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity 0.45s}
+.carousel img.active{opacity:1}
+.car-nav{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:2}
+.car-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);border:none;cursor:pointer;transition:background 0.2s}
+.car-dot.active{background:white}
+.car-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.35);color:white;border:none;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:20px;z-index:2;display:flex;align-items:center;justify-content:center;transition:background 0.2s}
+.car-btn:hover{background:rgba(0,0,0,0.6)}
+.car-btn.prev{left:16px}.car-btn.next{right:16px}
+.car-counter{position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.5);color:white;font-size:0.75rem;padding:4px 10px;border-radius:20px;z-index:2}
+
+/* THUMBNAILS */
+.thumbs{display:flex;gap:8px;margin-bottom:28px;overflow-x:auto;padding-bottom:4px}
+.thumb{width:72px;height:52px;object-fit:cover;border-radius:4px;cursor:pointer;border:2px solid transparent;flex-shrink:0;transition:border-color 0.2s;opacity:0.7}
+.thumb.active{border-color:var(--gold);opacity:1}
+.thumb:hover{opacity:1}
+
+/* INFOS */
+.bien-header{margin-bottom:24px}
+.bien-ref{font-size:0.72rem;color:var(--mid);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px}
+.bien-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:500;line-height:1.2;margin-bottom:8px}
+.bien-price{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold)}
+
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:28px}
+.info-card{background:white;border-radius:8px;padding:16px;border:1px solid var(--border)}
+.info-card .label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--mid);margin-bottom:4px}
+.info-card .value{font-size:0.95rem;font-weight:500}
+
+.amenities{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.amenity{background:white;border:1px solid var(--border);border-radius:20px;padding:6px 16px;font-size:0.82rem;display:flex;align-items:center;gap:6px}
+.amenity.on{border-color:var(--gold);background:#fffbf2}
+
+.desc-box{background:white;border-radius:8px;padding:24px;border:1px solid var(--border);margin-bottom:28px}
+.desc-box h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:14px;color:var(--dark)}
+.desc-box .desc-text{font-size:0.9rem;line-height:1.8;color:#444;white-space:pre-wrap}
+
+.footer-note{text-align:center;font-size:0.78rem;color:var(--mid);padding:24px;border-top:1px solid var(--border)}
+
+/* LOADING */
+.loading{text-align:center;padding:100px 20px}
+.loader{display:inline-block;width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-box{text-align:center;padding:80px 20px}
+.error-box h2{font-family:'Cormorant Garamond',serif;font-size:1.8rem;margin-bottom:12px}
+
+@media(max-width:600px){
+  .carousel{height:260px}
+  .bien-title{font-size:1.6rem}
+  .container{padding:20px 14px}
+  .header{padding:14px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Fiche Bien</h1>
+  <div class="header-btns">
+    <button class="btn-pdf" id="btnPdf" onclick="generatePDF()" style="display:none">📄 PDF</button>
+    <span class="badge" id="badgeTrans" style="display:none"></span>
+  </div>
+</div>
+
+<div class="container" id="container">
+  <div class="loading"><div class="loader"></div></div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://tfblsliwbsmxpcqnpqwo.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmYmxzbGl3YnNteHBjcW5wcXdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MTIxODUsImV4cCI6MjA5NTk4ODE4NX0.if4QBEF1VBWMTdSwLHy-H0SmhWD_3twYO9qQrC2t7VQ';
+const H = {'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY};
+
+let bien = null, photos = [], carIdx = 0;
+
+async function load() {
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('id') || params.get('ref');
+  if (!ref) { showError('Aucune référence spécifiée.'); return; }
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/biens?reference=eq.${encodeURIComponent(ref)}&select=*`, {headers:H});
+    const data = await res.json();
+    if (!data.length) { showError(`Bien "${ref}" introuvable.`); return; }
+    bien = data[0];
+
+    const pRes = await fetch(`${SUPABASE_URL}/rest/v1/photos?bien_id=eq.${bien.id}&select=*&order=ordre.asc`, {headers:H});
+    photos = await pRes.json();
+
+    render();
+  } catch(e) { showError('Erreur de chargement : ' + e.message); }
+}
+
+function render() {
+  document.title = `${bien.nom} — Fiche Bien`;
+  const badge = document.getElementById('badgeTrans');
+  badge.textContent = bien.transaction;
+  badge.className = 'badge badge-' + bien.transaction.toLowerCase();
+  badge.style.display = 'inline-block';
+  document.getElementById('btnPdf').style.display = 'inline-block';
+
+  const prix = bien.transaction === 'Location'
+    ? (bien.prix||0).toLocaleString('fr-FR') + ' MAD / mois'
+    : (bien.prix||0).toLocaleString('fr-FR') + ' MAD';
+
+  const carouselImgs = photos.length
+    ? photos.map((p,i) => `<img src="${p.url}" class="${i===0?'active':''}" alt="photo ${i+1}">`).join('')
+    : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#aaa;font-size:0.9rem">Pas de photos disponibles</div>';
+
+  const dots = photos.map((_,i) => `<button class="car-dot ${i===0?'active':''}" onclick="goTo(${i})"></button>`).join('');
+  const prevNext = photos.length > 1 ? `<button class="car-btn prev" onclick="move(-1)">&#8249;</button><button class="car-btn next" onclick="move(1)">&#8250;</button>` : '';
+  const counter = photos.length > 1 ? `<div class="car-counter">1 / ${photos.length}</div>` : '';
+
+  const thumbs = photos.length > 1
+    ? `<div class="thumbs">${photos.map((p,i)=>`<img class="thumb ${i===0?'active':''}" src="${p.url}" onclick="goTo(${i})" alt="">`).join('')}</div>`
+    : '';
+
+  const fields = [
+    {l:'Quartier', v:bien.quartier},
+    {l:'Type', v:bien.type_bien},
+    {l:'Surface hab.', v:bien.surface_hab?bien.surface_hab+' m²':null},
+    {l:'Surface terrain', v:bien.surface_terrain?bien.surface_terrain+' m²':null},
+    {l:'Chambres', v:bien.chambres},
+    {l:'Salles de bain', v:bien.salles_de_bain},
+    {l:'Statut', v:bien.statut},
+    {l:'Disponibilité', v:bien.disponibilite},
+  ].filter(f=>f.v!=null&&f.v!=='');
+
+  const amenities = [
+    {icon:'🚗', label:'Garage', on:bien.garage},
+    {icon:'🌿', label:'Jardin', on:bien.jardin},
+    {icon:'🏊', label:'Piscine', on:bien.piscine},
+    {icon:'🏗', label:'Sous-sol', on:bien.sous_sol},
+  ];
+
+  document.getElementById('container').innerHTML = `
+    <div class="carousel" id="car">
+      ${carouselImgs}
+      <div class="car-nav">${dots}</div>
+      ${prevNext}
+      ${counter}
+    </div>
+    ${thumbs}
+    <div class="bien-header">
+      <div class="bien-ref">${bien.reference}</div>
+      <div class="bien-title">${bien.nom}</div>
+      <div class="bien-price">${prix}</div>
+    </div>
+    <div class="info-grid">
+      ${fields.map(f=>`<div class="info-card"><div class="label">${f.l}</div><div class="value">${f.v}</div></div>`).join('')}
+    </div>
+    <div class="amenities">
+      ${amenities.map(a=>`<div class="amenity ${a.on?'on':''}">${a.icon} ${a.label}</div>`).join('')}
+    </div>
+    ${bien.description ? `<div class="desc-box"><h3>Description</h3><div class="desc-text">${bien.description.replace(/</g,'&lt;')}</div></div>` : ''}
+    <div class="footer-note">Pour toute information, contactez votre agent immobilier.</div>
+  `;
+}
+
+function goTo(i) {
+  const imgs = document.querySelectorAll('#car img');
+  const dots = document.querySelectorAll('.car-dot');
+  const thumbs = document.querySelectorAll('.thumb');
+  const counter = document.querySelector('.car-counter');
+  if(!imgs.length) return;
+  imgs[carIdx].classList.remove('active'); dots[carIdx]?.classList.remove('active'); thumbs[carIdx]?.classList.remove('active');
+  carIdx = i;
+  imgs[carIdx].classList.add('active'); dots[carIdx]?.classList.add('active'); thumbs[carIdx]?.classList.add('active');
+  if(counter) counter.textContent = `${carIdx+1} / ${imgs.length}`;
+}
+function move(d) { goTo((carIdx+d+photos.length)%photos.length); }
+
+function showError(msg) {
+  document.getElementById('container').innerHTML = `<div class="error-box"><h2>Bien introuvable</h2><p style="color:var(--mid)">${msg}</p></div>`;
+}
+
+async function generatePDF() {
+  if(!bien) return;
+  const btn = document.getElementById('btnPdf');
+  btn.textContent = '⏳...'; btn.disabled = true;
+  try {
+    const {jsPDF} = window.jspdf;
+    const doc = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const W=210,H=297,gold=[196,164,90],dark=[26,26,26],mid=[107,101,96],cream=[245,240,232];
+
+    doc.setFillColor(...cream); doc.rect(0,0,W,H,'F');
+    doc.setFillColor(...dark); doc.rect(0,0,W,22,'F');
+    doc.setFillColor(...gold); doc.rect(0,22,W,1.5,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(232,213,163);
+    doc.text('FICHE BIEN IMMOBILIER', 14, 14);
+    doc.setFontSize(8); doc.setTextColor(150,150,150);
+    doc.text(bien.reference||'', W-14, 14, {align:'right'});
+
+    let y=30;
+    if(photos.length) {
+      const pc=Math.min(photos.length,3), iw=pc===1?182:pc===2?89:58.5, ih=pc===1?90:65;
+      for(let i=0;i<pc;i++) {
+        try {
+          const imgData = await getBase64(photos[i].url);
+          doc.addImage(imgData,'JPEG',14+i*(iw+3),y,iw,ih,'','MEDIUM');
+        } catch(e) {}
+      }
+      y+=ih+8;
+    }
+
+    doc.setFillColor(255,255,255); doc.roundedRect(14,y,182,24,2,2,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(...dark);
+    doc.text(bien.nom||'', 20, y+9);
+    doc.setFont('helvetica','normal'); doc.setFontSize(12); doc.setTextColor(...gold);
+    const prix = bien.transaction==='Location'?(bien.prix||0).toLocaleString('fr-FR')+' MAD / mois':(bien.prix||0).toLocaleString('fr-FR')+' MAD';
+    doc.text(prix, 20, y+18);
+    const bc=bien.transaction==='Vente'?dark:gold;
+    doc.setFillColor(...bc); doc.roundedRect(W-46,y+5,32,8,1,1,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(255,255,255);
+    doc.text(bien.transaction.toUpperCase(),W-30,y+10.5,{align:'center'});
+    y+=30;
+
+    const fields=[
+      ['Quartier',bien.quartier],['Type',bien.type_bien],
+      ['Surface hab.',bien.surface_hab?bien.surface_hab+' m²':'—'],
+      bien.surface_terrain?['Terrain',bien.surface_terrain+' m²']:null,
+      ['Chambres',bien.chambres],['Salles de bain',bien.salles_de_bain],
+      ['Garage',bien.garage?'Oui':'Non'],['Jardin',bien.jardin?'Oui':'Non'],
+      ['Piscine',bien.piscine?'Oui':'Non'],['Sous-sol',bien.sous_sol?'Oui':'Non'],
+      ['Statut',bien.statut],['Disponibilité',bien.disponibilite],
+    ].filter(Boolean);
+    const rows=Math.ceil(fields.length/3), gridH=rows*13+12;
+    doc.setFillColor(255,255,255); doc.roundedRect(14,y,182,gridH,2,2,'F');
+    fields.forEach((f,i)=>{
+      const col=i%3,row=Math.floor(i/3),fx=18+col*60,fy=y+9+row*13;
+      doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(...mid);
+      doc.text((f[0]||'').toUpperCase(),fx,fy);
+      doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(...dark);
+      doc.text(String(f[1]||'—'),fx,fy+5.5);
+    });
+    y+=gridH+6;
+
+    if(bien.description) {
+      doc.setFillColor(255,255,255);
+      const dlines=doc.splitTextToSize(bien.description.replace(/
+/g,' '),168);
+      const dh=Math.min(dlines.length*4.8+18,H-y-18);
+      doc.roundedRect(14,y,182,dh,2,2,'F');
+      doc.setFillColor(...gold); doc.rect(14,y,3,dh,'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...dark);
+      doc.text('DESCRIPTION',22,y+9);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(70,70,70);
+      doc.text(dlines,22,y+16);
+    }
+
+    doc.setFillColor(...dark); doc.rect(0,H-12,W,12,'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(150,150,150);
+    doc.text('Pour toute information, contactez votre agent immobilier.',W/2,H-5,{align:'center'});
+
+    doc.save((bien.reference||'fiche')+'_bien.pdf');
+  } catch(e) { console.error(e); }
+  btn.textContent='📄 PDF'; btn.disabled=false;
+}
+
+function getBase64(url) {
+  return new Promise((resolve,reject) => {
+    const img = new Image(); img.crossOrigin='anonymous';
+    img.onload = () => {
+      const c=document.createElement('canvas'); c.width=img.width; c.height=img.height;
+      c.getContext('2d').drawImage(img,0,0);
+      resolve(c.toDataURL('image/jpeg',0.8));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+load();
+</script>
+</body>
+</html>
