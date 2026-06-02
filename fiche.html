@@ -261,8 +261,8 @@ async function generatePDF() {
 
     if(bien.description) {
       doc.setFillColor(255,255,255);
-      const dlines=doc.splitTextToSize(bien.description.replace(/
-/g,' '),168);
+      const dlines=doc.splitTextToSize((bien.description||'').replace(/\s+/g,' '),168);
+
       const dh=Math.min(dlines.length*4.8+18,H-y-18);
       doc.roundedRect(14,y,182,dh,2,2,'F');
       doc.setFillColor(...gold); doc.rect(14,y,3,dh,'F');
