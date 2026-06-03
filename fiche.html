@@ -7,7 +7,7 @@
 <meta property="og:title" content="Bien immobilier">
 <meta property="og:description" content="Consultez la fiche de ce bien immobilier">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--cream:#f5f0e8;--dark:#1a1a1a;--gold:#c4a45a;--gold-light:#e8d5a3;--mid:#6b6560;--border:#e2ddd5}
@@ -18,8 +18,7 @@ body{background:var(--cream);font-family:'DM Sans',sans-serif;color:var(--dark);
 .badge{padding:5px 14px;border-radius:3px;font-size:0.7rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase}
 .badge-vente{background:white;color:var(--dark)}
 .badge-location{background:var(--gold);color:white}
-.btn-pdf{padding:9px 18px;background:var(--gold);color:white;border:none;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:background 0.2s}
-.btn-pdf:hover{background:#b8943e}
+
 .container{max-width:900px;margin:0 auto;padding:36px 24px}
 
 /* CAROUSEL */
@@ -81,7 +80,7 @@ body{background:var(--cream);font-family:'DM Sans',sans-serif;color:var(--dark);
 <div class="header">
   <h1>Fiche Bien</h1>
   <div class="header-btns">
-    <button class="btn-pdf" id="btnPdf" onclick="generatePDF()" style="display:none">📄 PDF</button>
+
     <span class="badge" id="badgeTrans" style="display:none"></span>
   </div>
 </div>
@@ -214,100 +213,9 @@ function showError(msg) {
   document.getElementById('container').innerHTML = `<div class="error-box"><h2>Bien introuvable</h2><p style="color:var(--mid)">${msg}</p></div>`;
 }
 
-async function generatePDF() {
-  if(!bien) return;
-  const btn = document.getElementById('btnPdf');
-  btn.textContent = '⏳...'; btn.disabled = true;
-  try {
-    const {jsPDF} = window.jspdf;
-    const doc = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-    const W=210,H=297,gold=[196,164,90],dark=[26,26,26],mid=[107,101,96],cream=[245,240,232];
 
-    doc.setFillColor(...cream); doc.rect(0,0,W,H,'F');
-    doc.setFillColor(...dark); doc.rect(0,0,W,22,'F');
-    doc.setFillColor(...gold); doc.rect(0,22,W,1.5,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(232,213,163);
-    doc.text('FICHE BIEN IMMOBILIER', 14, 14);
-    doc.setFontSize(8); doc.setTextColor(150,150,150);
-    doc.text(bien.reference||'', W-14, 14, {align:'right'});
 
-    let y=30;
-    if(photos.length) {
-      const pc=Math.min(photos.length,3), iw=pc===1?182:pc===2?89:58.5, ih=pc===1?90:65;
-      for(let i=0;i<pc;i++) {
-        try {
-          const imgData = await getBase64(photos[i].url);
-          doc.addImage(imgData,'JPEG',14+i*(iw+3),y,iw,ih,'','MEDIUM');
-        } catch(e) {}
-      }
-      y+=ih+8;
-    }
-
-    doc.setFillColor(255,255,255); doc.roundedRect(14,y,182,24,2,2,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(...dark);
-    doc.text(bien.nom||'', 20, y+9);
-    doc.setFont('helvetica','normal'); doc.setFontSize(12); doc.setTextColor(...gold);
-    const prix = bien.transaction==='Location'?(bien.prix||0).toLocaleString('fr-FR')+' MAD / mois':(bien.prix||0).toLocaleString('fr-FR')+' MAD';
-    doc.text(prix, 20, y+18);
-    const bc=bien.transaction==='Vente'?dark:gold;
-    doc.setFillColor(...bc); doc.roundedRect(W-46,y+5,32,8,1,1,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(255,255,255);
-    doc.text(bien.transaction.toUpperCase(),W-30,y+10.5,{align:'center'});
-    y+=30;
-
-    const fields=[
-      ['Quartier',bien.quartier],['Type',bien.type_bien],
-      ['Surface hab.',bien.surface_hab?bien.surface_hab+' m²':'—'],
-      bien.surface_terrain?['Terrain',bien.surface_terrain+' m²']:null,
-      ['Chambres',bien.chambres],['Salles de bain',bien.salles_de_bain],
-      ['Garage',bien.garage?'Oui':'Non'],['Jardin',bien.jardin?'Oui':'Non'],
-      ['Piscine',bien.piscine?'Oui':'Non'],['Sous-sol',bien.sous_sol?'Oui':'Non'],
-      ['Statut',bien.statut],['Disponibilité',bien.disponibilite],
-    ].filter(Boolean);
-    const rows=Math.ceil(fields.length/3), gridH=rows*13+12;
-    doc.setFillColor(255,255,255); doc.roundedRect(14,y,182,gridH,2,2,'F');
-    fields.forEach((f,i)=>{
-      const col=i%3,row=Math.floor(i/3),fx=18+col*60,fy=y+9+row*13;
-      doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(...mid);
-      doc.text((f[0]||'').toUpperCase(),fx,fy);
-      doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(...dark);
-      doc.text(String(f[1]||'—'),fx,fy+5.5);
-    });
-    y+=gridH+6;
-
-    if(bien.description) {
-      doc.setFillColor(255,255,255);
-      const dlines=doc.splitTextToSize((bien.description||'').replace(/\s+/g,' '),168);
-
-      const dh=Math.min(dlines.length*4.8+18,H-y-18);
-      doc.roundedRect(14,y,182,dh,2,2,'F');
-      doc.setFillColor(...gold); doc.rect(14,y,3,dh,'F');
-      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...dark);
-      doc.text('DESCRIPTION',22,y+9);
-      doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(70,70,70);
-      doc.text(dlines,22,y+16);
-    }
-
-    doc.setFillColor(...dark); doc.rect(0,H-12,W,12,'F');
-    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(150,150,150);
-    doc.text('Pour toute information, contactez votre agent immobilier.',W/2,H-5,{align:'center'});
-
-    doc.save((bien.reference||'fiche')+'_bien.pdf');
-  } catch(e) { console.error(e); }
-  btn.textContent='📄 PDF'; btn.disabled=false;
-}
-
-function getBase64(url) {
-  return new Promise((resolve,reject) => {
-    const img = new Image(); img.crossOrigin='anonymous';
-    img.onload = () => {
-      const c=document.createElement('canvas'); c.width=img.width; c.height=img.height;
-      c.getContext('2d').drawImage(img,0,0);
-      resolve(c.toDataURL('image/jpeg',0.8));
-    };
-    img.onerror = reject;
-    img.src = url;
-  });
+;
 }
 
 load();

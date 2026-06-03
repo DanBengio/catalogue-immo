@@ -160,11 +160,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
   </div>
 
   <div class="app-content" id="appContent">
-    <div class="ptr-indicator" id="ptrIndicator">
-      <div class="ptr-spinner" id="ptrSpinner"></div>
-      <span class="ptr-arrow" id="ptrArrow">↓</span>
-      <span id="ptrText">Tirer pour actualiser</span>
-    </div>
+
 
     <!-- HOME -->
     <div class="home-view active" id="viewHome">
@@ -301,8 +297,11 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
         </div>
         <div class="photos-grid" id="editPhotosGrid"></div>
       </div>
-      <div class="bottom-action">
-        <button class="btn-full" onclick="saveEdit()">Enregistrer les modifications ✓</button>
+      <div class="bottom-action" id="editSaveBar" style="display:none">
+        <button class="btn-full gold" onclick="saveEdit()" style="font-size:0.95rem;padding:16px;box-shadow:0 -4px 20px rgba(196,164,90,0.3)">
+          💾 Enregistrer les modifications
+        </button>
+        <p style="text-align:center;font-size:0.72rem;color:var(--mid);margin-top:8px">Des modifications non enregistrées sont en attente</p>
       </div>
     </div>
 
@@ -325,6 +324,13 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
   <button class="lightbox-close">✕</button>
   <img id="lightboxImg" src="" alt="">
 </div>
+<!-- PTR INDICATOR - fixed top -->
+<div id="ptrIndicator" style="position:fixed;top:0;left:0;right:0;height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--gold);color:white;font-size:0.82rem;gap:8px;z-index:200;transition:height 0.1s">
+  <div id="ptrSpinner" style="display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite"></div>
+  <span id="ptrArrow" style="font-size:1rem;transition:transform 0.2s">↓</span>
+  <span id="ptrText">Tirer pour actualiser</span>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -468,8 +474,8 @@ Texte:\n${text}`;
 
 function buildFormHTML(d) {
   return `
-    <div class="form-field"><label>Référence</label><input id="rRef" value="${d.reference||''}"></div>
-    <div class="form-field"><label>Nom</label><input id="rNom" value="${d.nom||''}"></div>
+    <div class="form-field"><label>Référence</label><input id="rRef" value="${d.reference||''}" oninput="markDirty()"></div>
+    <div class="form-field"><label>Nom</label><input id="rNom" value="${d.nom||''}" oninput="markDirty()"></div>
     <div class="form-field"><label>Transaction</label>
       <select id="rTrans"><option ${d.transaction==='Vente'?'selected':''}>Vente</option><option ${d.transaction==='Location'?'selected':''}>Location</option></select>
     </div>
@@ -603,12 +609,17 @@ load();
 }
 
 // ── MODIFIER ──────────────────────────────────────
+function markDirty() {
+  document.getElementById('editSaveBar').style.display='block';
+}
+
 function openEdit(bienId) {
   const b=allBiens.find(x=>x.id===bienId);
   if(!b) return;
   document.getElementById('editBienId').value=bienId;
   document.getElementById('editTitle').textContent=b.nom||'Modifier le bien';
   editPhotos=allPhotos.filter(p=>p.bien_id===bienId).map(p=>({...p,isExisting:true}));
+  document.getElementById('editSaveBar').style.display='none';
   document.getElementById('editFields').innerHTML=buildFormHTML({
     reference:b.reference,nom:b.nom,transaction:b.transaction,type_bien:b.type_bien,
     quartier:b.quartier,prix:b.prix,surface_hab:b.surface_hab,surface_terrain:b.surface_terrain,
@@ -627,6 +638,7 @@ function handleEditPhotos(files) {
   }
 }
 function renderEditPhotos() {
+  markDirty();
   const grid=document.getElementById('editPhotosGrid');
   if(!editPhotos.length){grid.innerHTML='<p style="font-size:0.8rem;color:var(--mid);text-align:center;padding:8px">Aucune photo</p>';return;}
   grid.innerHTML=editPhotos.map((p,i)=>`
@@ -665,9 +677,10 @@ async function saveEdit() {
         try{const c=await compress(newPhotos[i].file);await uploadPhoto(c,bienId,existingCount+i);}catch(e){console.error(e);}
       }
     }
-    toast('Modifications enregistrées ✓');
+    document.getElementById('editSaveBar').style.display='none';
     await load();
-    showView('biens');
+    toast('✅ Modifications enregistrées !');
+    setTimeout(()=>showView('biens'), 800);
   } catch(e){toast('Erreur : '+e.message,true);}
 }
 
