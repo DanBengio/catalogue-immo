@@ -183,6 +183,31 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
           <div class="step-title">Nouveau bien</div>
         </div>
         <div class="step-body">
+          <p style="font-size:0.82rem;color:var(--mid);margin-bottom:20px">Choisissez comment ajouter ce bien :</p>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <button class="home-btn home-btn-primary" onclick="showIStep(11)" style="border-radius:10px">
+              <span class="home-btn-icon">✦</span>
+              <div class="home-btn-text">
+                <strong>Import automatique</strong>
+                <span>Colle la description WhatsApp, Claude analyse</span>
+              </div>
+            </button>
+            <button class="home-btn home-btn-secondary" onclick="openManual()" style="border-radius:10px">
+              <span class="home-btn-icon">✏️</span>
+              <div class="home-btn-text">
+                <strong>Saisie manuelle</strong>
+                <span>Remplis le formulaire directement</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="import-step" id="istep11">
+        <div class="step-header">
+          <button class="step-back" onclick="showIStep(1)">←</button>
+          <div class="step-title">Import automatique</div>
+        </div>
+        <div class="step-body">
           <div style="margin-bottom:10px">
             <label style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--mid);font-weight:500;display:block;margin-bottom:8px">Description du bien</label>
             <textarea class="import-textarea" id="importText" placeholder="🏡 Villa à louer – CIL&#10;💰 Loyer : 35 000 dhs&#10;📐 448 m²&#10;..."></textarea>
@@ -221,6 +246,16 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
 
     <!-- BIENS -->
     <div class="view" id="viewBiens">
+      <div style="padding:10px 14px;background:white;border-bottom:1px solid var(--border)">
+        <input id="biensSearch" type="text" placeholder="🔍 Rechercher..." oninput="renderBiens()"
+          style="width:100%;padding:9px 14px;border:1px solid var(--border);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:0.85rem;background:var(--cream);outline:none">
+      </div>
+      <div style="padding:10px 14px;background:white;border-bottom:1px solid var(--border)">
+        <select id="quartierFilter" onchange="renderBiens()"
+          style="width:100%;padding:9px 14px;border:1px solid var(--border);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:0.82rem;background:var(--cream);color:var(--dark);outline:none;cursor:pointer">
+          <option value="">📍 Tous les quartiers</option>
+        </select>
+      </div>
       <div class="biens-filters" id="biensFilters">
         <button class="filter-chip active" data-filter="all">Tous</button>
         <button class="filter-chip" data-filter="Vente">Vente</button>
@@ -332,6 +367,9 @@ async function load() {
     document.getElementById('statVente').textContent=b.filter(x=>x.transaction==='Vente').length;
     document.getElementById('statLocation').textContent=b.filter(x=>x.transaction==='Location').length;
     document.getElementById('statusDot').style.background='var(--green)';
+    const quartiers=[...new Set(b.map(x=>x.quartier).filter(Boolean))].sort();
+    const sel=document.getElementById('quartierFilter');
+    if(sel){const cur=sel.value;sel.innerHTML='<option value="">📍 Tous les quartiers</option>'+quartiers.map(q=>'<option value="'+q+'">'+q+'</option>').join('');}
     renderBiens();
   } catch(e) {
     document.getElementById('statusDot').style.background='var(--red)';
@@ -351,14 +389,19 @@ function showView(name) {
 }
 function goToImport() {
   importPhotos=[];
-  document.getElementById('importText').value='';
+  const it=document.getElementById('importText');if(it)it.value='';
   document.getElementById('warningBox').style.display='none';
   document.getElementById('importPhotosGrid').innerHTML='';
   showIStep(1);
   showView('import');
   document.getElementById('nav-import').classList.add('active');
 }
-function showIStep(n){[1,2,3].forEach(i=>document.getElementById('istep'+i).classList.toggle('active',i===n));}
+function showIStep(n){
+  [1,11,2,3].forEach(i=>{
+    const el=document.getElementById('istep'+i);
+    if(el) el.classList.toggle('active',i===n);
+  });
+}
 
 // ── IMPORT PHOTOS ─────────────────────────────────
 function handleImportPhotos(files) {
@@ -384,7 +427,7 @@ function setImportPrimary(i){const m=importPhotos.splice(i,1)[0];importPhotos.un
 async function analyzeText() {
   const text=document.getElementById('importText').value.trim();
   if(!text){toast('Colle une description',true);return;}
-  showIStep(2);
+  showIStep(2); // from istep11
   const PROMPT=`Tu es un assistant spécialisé en immobilier marocain. Analyse ce texte et extrais les informations.
 IMPORTANT: Pour "description", copie le texte ORIGINAL exactement avec tous les emojis et retours à la ligne. Mets null pour tout champ non clairement indiqué. Ne devine jamais.
 Réponds UNIQUEMENT en JSON valide:
@@ -559,15 +602,31 @@ async function saveEdit() {
   } catch(e){toast('Erreur : '+e.message,true);}
 }
 
+// ── MANUAL ADD ───────────────────────────────────
+function openManual() {
+  const empty = {reference:'',nom:'',transaction:'Location',type_bien:'Villa',quartier:'',prix:'',
+    surface_hab:'',surface_terrain:'',chambres:'',salles_de_bain:'',garage:false,jardin:false,
+    piscine:false,sous_sol:false,statut:'Disponible',disponibilite:'',description:''};
+  importPhotos=[];
+  document.getElementById('importPhotosGrid').innerHTML='';
+  document.getElementById('warningBox').style.display='none';
+  document.getElementById('reviewFields').innerHTML=buildFormHTML(empty);
+  showIStep(3);
+}
+
 // ── BIENS LIST ────────────────────────────────────
 function renderBiens() {
+  const q=(document.getElementById('biensSearch')||{value:''}).value.toLowerCase();
+  const quartier=(document.getElementById('quartierFilter')||{value:''}).value;
   const filtered=allBiens.filter(b=>{
-    if(activeFilter==='all') return true;
-    if(activeFilter==='Vente') return b.transaction==='Vente';
-    if(activeFilter==='Location') return b.transaction==='Location';
-    if(activeFilter==='piscine') return b.piscine;
-    if(activeFilter==='garage') return b.garage;
-    if(activeFilter==='jardin') return b.jardin;
+    if(activeFilter==='all') {}
+    else if(activeFilter==='Vente' && b.transaction!=='Vente') return false;
+    else if(activeFilter==='Location' && b.transaction!=='Location') return false;
+    else if(activeFilter==='piscine' && !b.piscine) return false;
+    else if(activeFilter==='garage' && !b.garage) return false;
+    else if(activeFilter==='jardin' && !b.jardin) return false;
+    if(quartier && b.quartier!==quartier) return false;
+    if(q && !(''+b.reference+' '+b.nom+' '+b.quartier).toLowerCase().includes(q)) return false;
     return true;
   });
   const list=document.getElementById('biensList');
