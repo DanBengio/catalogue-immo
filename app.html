@@ -123,7 +123,14 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
 .btn-partager.copied{background:var(--green)}
 .btn-voir{background:var(--cream);color:var(--dark);border:1px solid var(--border)}
 .btn-modifier{background:var(--dark);color:white}
+.btn-supprimer{background:#fce4e4;color:var(--red);border:1px solid #f5c6c6}
+.btn-supprimer:hover{background:var(--red);color:white}
 .no-biens{text-align:center;padding:60px 20px;color:var(--mid)}
+
+@media(min-width:768px){
+  .biens-list{display:grid!important;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px}
+  .bien-card-actions{flex-wrap:wrap}
+}
 .no-biens h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:8px;color:var(--dark)}
 
 /* LIGHTBOX */
@@ -316,6 +323,20 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
   <button class="lightbox-close">✕</button>
   <img id="lightboxImg" src="" alt="">
 </div>
+<!-- CONFIRM DELETE MODAL -->
+<div id="confirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300;align-items:center;justify-content:center;padding:20px">
+  <div style="background:white;border-radius:12px;padding:28px;max-width:320px;width:100%;text-align:center">
+    <div style="font-size:2rem;margin-bottom:12px">🗑</div>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:8px">Supprimer ce bien ?</h3>
+    <p id="confirmText" style="font-size:0.82rem;color:var(--mid);margin-bottom:6px"></p>
+    <p style="font-size:0.78rem;color:var(--red);margin-bottom:24px">Cette action est irréversible.</p>
+    <div style="display:flex;gap:10px">
+      <button onclick="closeConfirm()" style="flex:1;padding:12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer">Annuler</button>
+      <button onclick="confirmDelete()" style="flex:1;padding:12px;background:var(--red);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer">Supprimer</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -536,6 +557,32 @@ async function saveImported() {
     toast('Bien ajouté ✓');
     await 
 
+// ── DELETE ───────────────────────────────────────
+let deleteBienId = null;
+
+function askDelete(id, nom) {
+  deleteBienId = id;
+  document.getElementById('confirmText').textContent = nom || 'Ce bien sera définitivement supprimé.';
+  const overlay = document.getElementById('confirmOverlay');
+  overlay.style.display = 'flex';
+}
+function closeConfirm() {
+  document.getElementById('confirmOverlay').style.display = 'none';
+  deleteBienId = null;
+}
+async function confirmDelete() {
+  if(!deleteBienId) return;
+  try {
+    await api('/rest/v1/biens?id=eq.'+deleteBienId, {method:'DELETE'});
+    toast('Bien supprimé ✓');
+    closeConfirm();
+    await load();
+  } catch(e) { toast('Erreur : '+e.message, true); }
+}
+document.getElementById('confirmOverlay').addEventListener('click', function(e){
+  if(e.target===this) closeConfirm();
+});
+
 // ── PULL TO REFRESH ──────────────────────────────
 (function(){
   let sy=0, moved=false;
@@ -697,7 +744,8 @@ function renderBiens() {
         <div class="bien-card-actions">
           <button class="btn-action btn-partager" onclick="partager('${ficheUrl}',this)">🔗 Partager</button>
           <a href="${ficheUrl}" target="_blank" class="btn-action btn-voir">👁 Voir</a>
-          <button class="btn-action btn-modifier" onclick="openEdit('${b.id}')">✏️ Modifier</button>
+          <button class="btn-action btn-modifier" onclick="openEdit('${b.id}')">✏️</button>
+          <button class="btn-action btn-supprimer" onclick="askDelete('${b.id}','${b.nom}')">🗑</button>
         </div>
       </div>
     </div>`;
