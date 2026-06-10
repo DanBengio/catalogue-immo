@@ -19,14 +19,22 @@
 }
 html,body{height:100%;overflow:hidden;background:var(--cream)}
 body{font-family:'DM Sans',sans-serif;color:var(--dark)}
-.app{display:flex;flex-direction:column;height:100%;height:100dvh}
-.app-header{background:var(--dark);padding:calc(var(--safe-top) + 14px) 20px 14px;border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative;z-index:10}
+
+/* DESKTOP */
+@media(min-width:768px){
+  body{background:#2a2a2a;display:flex;align-items:center;justify-content:center;min-height:100vh}
+  .app{max-width:420px;margin:0 auto;box-shadow:0 0 40px rgba(0,0,0,0.3);border-radius:12px;overflow:hidden}
+  .biens-list{display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important;padding:12px!important}
+}
+
+.app{display:flex;flex-direction:column;height:100%;height:100dvh;background:var(--cream)}
+.app-header{background:var(--dark);padding:calc(var(--safe-top) + 14px) 20px 14px;border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;position:relative}
 .app-header h1{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;color:var(--gold-light);letter-spacing:0.08em}
 .header-sub{font-size:0.68rem;color:#888;letter-spacing:0.1em;text-transform:uppercase;margin-top:1px}
 .status-dot{width:8px;height:8px;border-radius:50%;background:#555;flex-shrink:0}
-.app-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.bottom-nav{background:var(--dark);border-top:1px solid #333;display:flex;padding-bottom:var(--safe-bottom);flex-shrink:0;position:relative;z-index:10}
-.nav-btn{flex:1;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;transition:all 0.2s;color:#888;font-family:'DM Sans',sans-serif}
+.app-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative}
+.bottom-nav{background:var(--dark);border-top:1px solid #333;display:flex;padding-bottom:var(--safe-bottom);flex-shrink:0;z-index:10;position:relative}
+.nav-btn{flex:1;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;color:#888;font-family:'DM Sans',sans-serif}
 .nav-btn.active{color:var(--gold)}
 .nav-icon{font-size:1.4rem}
 .nav-label{font-size:0.65rem;letter-spacing:0.06em;text-transform:uppercase}
@@ -46,7 +54,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
 .home-stat-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:500;color:var(--dark);line-height:1}
 .home-stat-label{font-size:0.7rem;color:var(--mid);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px}
 .home-actions{padding:20px;display:flex;flex-direction:column;gap:12px}
-.home-btn{padding:18px 20px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:14px;transition:all 0.2s;text-align:left}
+.home-btn{padding:18px 20px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:14px;text-align:left;width:100%}
 .home-btn-primary{background:var(--gold);color:white}
 .home-btn-secondary{background:white;color:var(--dark);border:1px solid var(--border)}
 .home-btn-icon{font-size:1.8rem;flex-shrink:0}
@@ -54,14 +62,13 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
 .home-btn-text span{font-size:0.76rem;opacity:0.8}
 
 /* STEP LAYOUT */
-.step-header{padding:14px 20px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+.step-header{padding:14px 20px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
 .step-back{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--mid);padding:4px;line-height:1}
 .step-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500}
 .step-body{padding:16px}
-.bottom-action{position:sticky;bottom:0;background:white;border-top:1px solid var(--border);padding:12px 16px calc(var(--safe-bottom) + 12px)}
-.btn-full{width:100%;padding:14px;background:var(--dark);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:background 0.2s}
+.bottom-action{position:sticky;bottom:0;background:white;border-top:1px solid var(--border);padding:12px 16px calc(var(--safe-bottom) + 12px);z-index:5}
+.btn-full{width:100%;padding:14px;background:var(--dark);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer}
 .btn-full.gold{background:var(--gold)}
-.btn-full:disabled{opacity:0.5;cursor:not-allowed}
 
 /* IMPORT */
 .import-step{display:none}
@@ -87,7 +94,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
 .section-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;margin:18px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--border)}
 
 /* PHOTOS */
-.photo-upload-zone{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--cream);margin-bottom:12px}
+.photo-upload-zone{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:var(--cream);margin-bottom:12px}
 .photo-upload-zone input{display:none}
 .photo-upload-zone .icon{font-size:1.8rem}
 .photo-upload-zone p{font-size:0.8rem;color:var(--mid);margin-top:5px}
@@ -100,9 +107,13 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
 .photo-star{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);background:rgba(196,164,90,0.9);color:white;border:none;border-radius:4px;font-size:0.63rem;padding:2px 6px;cursor:pointer;white-space:nowrap}
 
 /* BIENS */
-.biens-filters{padding:12px 16px;background:white;border-bottom:1px solid var(--border);display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.biens-search{padding:10px 14px;background:white;border-bottom:1px solid var(--border)}
+.biens-search input{width:100%;padding:9px 14px;border:1px solid var(--border);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:0.85rem;background:var(--cream);outline:none}
+.biens-quartier{padding:8px 14px;background:white;border-bottom:1px solid var(--border)}
+.biens-quartier select{width:100%;padding:9px 14px;border:1px solid var(--border);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:0.82rem;background:var(--cream);color:var(--dark);outline:none;cursor:pointer}
+.biens-filters{padding:10px 14px;background:white;border-bottom:1px solid var(--border);display:flex;gap:8px;overflow-x:auto}
 .biens-filters::-webkit-scrollbar{display:none}
-.filter-chip{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:white;font-size:0.75rem;cursor:pointer;white-space:nowrap;color:var(--mid);font-family:'DM Sans',sans-serif;flex-shrink:0;transition:all 0.2s}
+.filter-chip{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:white;font-size:0.75rem;cursor:pointer;white-space:nowrap;color:var(--mid);font-family:'DM Sans',sans-serif;flex-shrink:0}
 .filter-chip.active{background:var(--dark);color:white;border-color:var(--dark)}
 .biens-list{padding:14px;display:flex;flex-direction:column;gap:12px}
 .bien-card{background:white;border-radius:10px;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.05)}
@@ -117,49 +128,54 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
 .bien-card-price{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold);margin-bottom:10px}
 .bien-card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .tag{background:var(--cream);border:1px solid var(--border);border-radius:3px;padding:2px 7px;font-size:0.7rem;color:var(--mid)}
-.bien-card-actions{display:flex;gap:7px;border-top:1px solid var(--border);padding-top:11px}
-.btn-action{flex:1;padding:9px 6px;border:none;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.74rem;cursor:pointer;transition:all 0.2s;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px;letter-spacing:0.04em}
-.btn-partager{background:var(--gold);color:white}
+.bien-card-actions{display:flex;gap:6px;border-top:1px solid var(--border);padding-top:11px;flex-wrap:wrap}
+.btn-action{padding:9px 8px;border:none;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.74rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px}
+.btn-partager{flex:1;background:var(--gold);color:white}
 .btn-partager.copied{background:var(--green)}
-.btn-voir{background:var(--cream);color:var(--dark);border:1px solid var(--border)}
-.btn-modifier{background:var(--dark);color:white}
-.btn-supprimer{background:#fce4e4;color:var(--red);border:1px solid #f5c6c6}
-.btn-supprimer:hover{background:var(--red);color:white}
+.btn-voir{background:var(--cream);color:var(--dark);border:1px solid var(--border);padding:9px 12px}
+.btn-modifier{background:var(--dark);color:white;padding:9px 12px}
+.btn-supprimer{background:#fce4e4;color:var(--red);border:1px solid #f5c6c6;padding:9px 12px}
 .no-biens{text-align:center;padding:60px 20px;color:var(--mid)}
-
-@media(min-width:768px){
-  .biens-list{display:grid!important;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px}
-  .bien-card-actions{flex-wrap:wrap}
-}
 .no-biens h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:8px;color:var(--dark)}
 
+/* EDIT SAVE BAR */
+.edit-save-bar{display:none;position:sticky;bottom:0;background:white;border-top:2px solid var(--gold);padding:12px 16px calc(var(--safe-bottom) + 12px);z-index:5}
+.edit-save-bar p{text-align:center;font-size:0.72rem;color:var(--mid);margin-top:6px}
+
+/* OVERLAYS */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.overlay-box{background:white;border-radius:12px;padding:28px;max-width:320px;width:100%;text-align:center}
+.overlay-box h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:8px}
+.overlay-box p{font-size:0.82rem;color:var(--mid);margin-bottom:6px}
+.overlay-box .warn{font-size:0.78rem;color:var(--red);margin-bottom:24px}
+.overlay-btns{display:flex;gap:10px}
+.btn-cancel-overlay{flex:1;padding:12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer}
+.btn-delete-overlay{flex:1;padding:12px;background:var(--red);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer}
+
 /* LIGHTBOX */
-.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:1000;align-items:center;justify-content:center}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:200;align-items:center;justify-content:center}
 .lightbox.open{display:flex}
 .lightbox img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:4px}
-.lightbox-close{position:absolute;top:calc(var(--safe-top) + 16px);right:16px;background:rgba(255,255,255,0.15);color:white;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-
-
+.lightbox-close{position:absolute;top:calc(var(--safe-top)+16px);right:16px;background:rgba(255,255,255,0.15);color:white;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
 /* TOAST */
-.toast{position:fixed;bottom:calc(var(--safe-bottom) + 80px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:white;padding:10px 20px;border-radius:20px;font-size:0.82rem;z-index:9999;opacity:0;transition:all 0.3s;border-left:3px solid var(--gold);white-space:nowrap;pointer-events:none}
+.toast{position:fixed;bottom:calc(var(--safe-bottom)+80px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:white;padding:10px 20px;border-radius:20px;font-size:0.82rem;z-index:300;opacity:0;transition:all 0.3s;border-left:3px solid var(--gold);white-space:nowrap;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.error{border-left-color:var(--red)}
 </style>
 </head>
 <body>
 <div class="app">
-
   <div class="app-header">
     <div>
       <h1>Catalogue Immo</h1>
-      <div class="header-sub" id="headerSub">Casablanca</div>
+      <div class="header-sub">Casablanca</div>
     </div>
     <div class="status-dot" id="statusDot"></div>
   </div>
 
   <div class="app-content" id="appContent">
-
 
     <!-- HOME -->
     <div class="home-view active" id="viewHome">
@@ -176,7 +192,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
       <div class="home-actions">
         <button class="home-btn home-btn-primary" onclick="goToImport()">
           <span class="home-btn-icon">✦</span>
-          <div class="home-btn-text"><strong>Ajouter un bien</strong><span>Colle la description WhatsApp</span></div>
+          <div class="home-btn-text"><strong>Ajouter un bien</strong><span>Import auto ou saisie manuelle</span></div>
         </button>
         <button class="home-btn home-btn-secondary" onclick="showView('biens')">
           <span class="home-btn-icon">🏠</span>
@@ -187,6 +203,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
 
     <!-- IMPORT -->
     <div class="view" id="viewImport">
+      <!-- STEP 1 : CHOIX -->
       <div class="import-step active" id="istep1">
         <div class="step-header">
           <button class="step-back" onclick="showView('home')">←</button>
@@ -195,43 +212,38 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
         <div class="step-body">
           <p style="font-size:0.82rem;color:var(--mid);margin-bottom:20px">Choisissez comment ajouter ce bien :</p>
           <div style="display:flex;flex-direction:column;gap:12px">
-            <button class="home-btn home-btn-primary" onclick="showIStep(11)" style="border-radius:10px">
+            <button class="home-btn home-btn-primary" onclick="showIStep(11)">
               <span class="home-btn-icon">✦</span>
-              <div class="home-btn-text">
-                <strong>Import automatique</strong>
-                <span>Colle la description WhatsApp, Claude analyse</span>
-              </div>
+              <div class="home-btn-text"><strong>Import automatique</strong><span>Colle la description, Claude analyse</span></div>
             </button>
-            <button class="home-btn home-btn-secondary" onclick="openManual()" style="border-radius:10px">
+            <button class="home-btn home-btn-secondary" onclick="openManual()">
               <span class="home-btn-icon">✏️</span>
-              <div class="home-btn-text">
-                <strong>Saisie manuelle</strong>
-                <span>Remplis le formulaire directement</span>
-              </div>
+              <div class="home-btn-text"><strong>Saisie manuelle</strong><span>Remplis le formulaire directement</span></div>
             </button>
           </div>
         </div>
       </div>
+      <!-- STEP 11 : TEXTE -->
       <div class="import-step" id="istep11">
         <div class="step-header">
           <button class="step-back" onclick="showIStep(1)">←</button>
           <div class="step-title">Import automatique</div>
         </div>
         <div class="step-body">
-          <div style="margin-bottom:10px">
-            <label style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--mid);font-weight:500;display:block;margin-bottom:8px">Description du bien</label>
-            <textarea class="import-textarea" id="importText" placeholder="🏡 Villa à louer – CIL&#10;💰 Loyer : 35 000 dhs&#10;📐 448 m²&#10;..."></textarea>
-          </div>
-          <p style="font-size:0.78rem;color:var(--mid);margin-bottom:16px">Claude va analyser le texte automatiquement.</p>
+          <label style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--mid);font-weight:500;display:block;margin-bottom:8px">Description du bien</label>
+          <textarea class="import-textarea" id="importText" placeholder="🏡 Villa à louer – CIL&#10;💰 Loyer : 35 000 dhs&#10;📐 448 m²&#10;..."></textarea>
+          <p style="font-size:0.78rem;color:var(--mid);margin-top:10px">Claude va analyser le texte automatiquement.</p>
         </div>
         <div class="bottom-action">
           <button class="btn-full gold" onclick="analyzeText()">Analyser ✦</button>
         </div>
       </div>
+      <!-- STEP 2 : ANALYSE -->
       <div class="import-step" id="istep2">
         <div class="step-header"><div class="step-title">Analyse en cours...</div></div>
         <div class="analyzing-screen"><div class="loader"></div><p>Claude analyse votre description...</p></div>
       </div>
+      <!-- STEP 3 : REVIEW -->
       <div class="import-step" id="istep3">
         <div class="step-header">
           <button class="step-back" onclick="showIStep(1)">←</button>
@@ -256,17 +268,15 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
 
     <!-- BIENS -->
     <div class="view" id="viewBiens">
-      <div style="padding:10px 14px;background:white;border-bottom:1px solid var(--border)">
-        <input id="biensSearch" type="text" placeholder="🔍 Rechercher..." oninput="renderBiens()"
-          style="width:100%;padding:9px 14px;border:1px solid var(--border);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:0.85rem;background:var(--cream);outline:none">
+      <div class="biens-search">
+        <input type="text" id="biensSearch" placeholder="🔍 Rechercher..." oninput="renderBiens()">
       </div>
-      <div style="padding:10px 14px;background:white;border-bottom:1px solid var(--border)">
-        <select id="quartierFilter" onchange="renderBiens()"
-          style="width:100%;padding:9px 14px;border:1px solid var(--border);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:0.82rem;background:var(--cream);color:var(--dark);outline:none;cursor:pointer">
+      <div class="biens-quartier">
+        <select id="quartierFilter" onchange="renderBiens()">
           <option value="">📍 Tous les quartiers</option>
         </select>
       </div>
-      <div class="biens-filters" id="biensFilters">
+      <div class="biens-filters">
         <button class="filter-chip active" data-filter="all">Tous</button>
         <button class="filter-chip" data-filter="Vente">Vente</button>
         <button class="filter-chip" data-filter="Location">Location</button>
@@ -296,11 +306,9 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
         </div>
         <div class="photos-grid" id="editPhotosGrid"></div>
       </div>
-      <div class="bottom-action" id="editSaveBar" style="display:none">
-        <button class="btn-full gold" onclick="saveEdit()" style="font-size:0.95rem;padding:16px;box-shadow:0 -4px 20px rgba(196,164,90,0.3)">
-          💾 Enregistrer les modifications
-        </button>
-        <p style="text-align:center;font-size:0.72rem;color:var(--mid);margin-top:8px">Des modifications non enregistrées sont en attente</p>
+      <div class="edit-save-bar" id="editSaveBar">
+        <button class="btn-full gold" onclick="saveEdit()">💾 Enregistrer les modifications</button>
+        <p>Des modifications non enregistrées sont en attente</p>
       </div>
     </div>
 
@@ -319,22 +327,24 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
   </div>
 </div>
 
-<div class="lightbox" id="lightbox" onclick="closeLightbox()" style="pointer-events:none">
-  <button class="lightbox-close">✕</button>
-  <img id="lightboxImg" src="" alt="">
-</div>
-<!-- CONFIRM DELETE MODAL -->
-<div id="confirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300;align-items:center;justify-content:center;padding:20px;pointer-events:none">
-  <div style="background:white;border-radius:12px;padding:28px;max-width:320px;width:100%;text-align:center">
+<!-- CONFIRM DELETE -->
+<div class="overlay" id="confirmOverlay">
+  <div class="overlay-box">
     <div style="font-size:2rem;margin-bottom:12px">🗑</div>
-    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:8px">Supprimer ce bien ?</h3>
-    <p id="confirmText" style="font-size:0.82rem;color:var(--mid);margin-bottom:6px"></p>
-    <p style="font-size:0.78rem;color:var(--red);margin-bottom:24px">Cette action est irréversible.</p>
-    <div style="display:flex;gap:10px">
-      <button onclick="closeConfirm()" style="flex:1;padding:12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer">Annuler</button>
-      <button onclick="confirmDelete()" style="flex:1;padding:12px;background:var(--red);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer">Supprimer</button>
+    <h3>Supprimer ce bien ?</h3>
+    <p id="confirmText"></p>
+    <p class="warn">Cette action est irréversible.</p>
+    <div class="overlay-btns">
+      <button class="btn-cancel-overlay" onclick="closeConfirm()">Annuler</button>
+      <button class="btn-delete-overlay" onclick="confirmDelete()">Supprimer</button>
     </div>
   </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
 </div>
 
 <div class="toast" id="toast"></div>
@@ -344,448 +354,515 @@ const SUPABASE_URL = 'https://tfblsliwbsmxpcqnpqwo.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmYmxzbGl3YnNteHBjcW5wcXdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MTIxODUsImV4cCI6MjA5NTk4ODE4NX0.if4QBEF1VBWMTdSwLHy-H0SmhWD_3twYO9qQrC2t7VQ';
 const WORKER_URL  = 'https://catalogue-immo-proxy.bengio-dan.workers.dev';
 const BASE_URL    = 'https://danbengio.github.io/catalogue-immo';
-const H = {'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'};
+const SB_H = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_KEY,
+  'Content-Type': 'application/json'
+};
 
-let allBiens=[], allPhotos=[], importPhotos=[], editPhotos=[], activeFilter='all';
+var allBiens = [];
+var allPhotos = [];
+var importPhotos = [];
+var editPhotos = [];
+var activeFilter = 'all';
+var deleteBienId = null;
 
 // ── SUPABASE ──────────────────────────────────────
-async function api(path,opts={}) {
-  const res=await fetch(SUPABASE_URL+path,{headers:H,...opts});
-  if(!res.ok) throw new Error(await res.text());
-  if(res.status===204) return null;
+async function sbApi(path, opts) {
+  opts = opts || {};
+  var res = await fetch(SUPABASE_URL + path, Object.assign({headers: SB_H}, opts));
+  if (!res.ok) throw new Error(await res.text());
+  if (res.status === 204) return null;
   return res.json();
 }
-async function uploadPhoto(file,bienId,ordre=0) {
-  const ext=file.name.split('.').pop().toLowerCase();
-  const path=`${bienId}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-  const res=await fetch(`${SUPABASE_URL}/storage/v1/object/photos-biens/${path}`,{
-    method:'POST',
-    headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'image/jpeg','x-upsert':'true'},
-    body:file
+
+async function uploadPhoto(file, bienId, ordre) {
+  ordre = ordre || 0;
+  var ext = file.name.split('.').pop().toLowerCase();
+  var path = bienId + '/' + Date.now() + '_' + Math.random().toString(36).slice(2) + '.' + ext;
+  var res = await fetch(SUPABASE_URL + '/storage/v1/object/photos-biens/' + path, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'image/jpeg',
+      'x-upsert': 'true'
+    },
+    body: file
   });
-  if(!res.ok) throw new Error('Upload échoué');
-  const url=`${SUPABASE_URL}/storage/v1/object/public/photos-biens/${path}`;
-  await api('/rest/v1/photos',{method:'POST',body:JSON.stringify({bien_id:bienId,url,ordre}),headers:{...H,'Prefer':'return=minimal'}});
+  if (!res.ok) throw new Error('Upload échoué');
+  var url = SUPABASE_URL + '/storage/v1/object/public/photos-biens/' + path;
+  await sbApi('/rest/v1/photos', {
+    method: 'POST',
+    body: JSON.stringify({bien_id: bienId, url: url, ordre: ordre}),
+    headers: Object.assign({}, SB_H, {'Prefer': 'return=minimal'})
+  });
   return url;
 }
+
 function compress(file) {
-  return new Promise(r=>{
-    const img=new Image(),url=URL.createObjectURL(file);
-    img.onload=()=>{
-      const MAX=1200;let w=img.width,h=img.height;
-      if(w>MAX){h=h*MAX/w;w=MAX;}if(h>MAX){w=w*MAX/h;h=MAX;}
-      const c=document.createElement('canvas');c.width=w;c.height=h;
-      c.getContext('2d').drawImage(img,0,0,w,h);
-      c.toBlob(blob=>{r(new File([blob],file.name,{type:'image/jpeg'}));URL.revokeObjectURL(url);},'image/jpeg',0.78);
-    };img.src=url;
+  return new Promise(function(resolve) {
+    var img = new Image();
+    var url = URL.createObjectURL(file);
+    img.onload = function() {
+      var MAX = 1200;
+      var w = img.width, h = img.height;
+      if (w > MAX) { h = h * MAX / w; w = MAX; }
+      if (h > MAX) { w = w * MAX / h; h = MAX; }
+      var c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      c.toBlob(function(blob) {
+        resolve(new File([blob], file.name, {type: 'image/jpeg'}));
+        URL.revokeObjectURL(url);
+      }, 'image/jpeg', 0.78);
+    };
+    img.src = url;
   });
 }
 
 // ── LOAD ──────────────────────────────────────────
 async function load() {
   try {
-    const [b,p]=await Promise.all([
-      api('/rest/v1/biens?select=*&order=created_at.desc'),
-      api('/rest/v1/photos?select=*&order=ordre.asc')
+    var results = await Promise.all([
+      sbApi('/rest/v1/biens?select=*&order=created_at.desc'),
+      sbApi('/rest/v1/photos?select=*&order=ordre.asc')
     ]);
-    allBiens=b;allPhotos=p;
-    document.getElementById('statTotal').textContent=b.length;
-    document.getElementById('statDispo').textContent=b.filter(x=>x.statut==='Disponible').length;
-    document.getElementById('statVente').textContent=b.filter(x=>x.transaction==='Vente').length;
-    document.getElementById('statLocation').textContent=b.filter(x=>x.transaction==='Location').length;
-    document.getElementById('statusDot').style.background='var(--green)';
-    const quartiers=[...new Set(b.map(x=>x.quartier).filter(Boolean))].sort();
-    const sel=document.getElementById('quartierFilter');
-    if(sel){const cur=sel.value;sel.innerHTML='<option value="">📍 Tous les quartiers</option>'+quartiers.map(q=>'<option value="'+q+'">'+q+'</option>').join('');}
+    allBiens = results[0];
+    allPhotos = results[1];
+    document.getElementById('statTotal').textContent = allBiens.length;
+    document.getElementById('statDispo').textContent = allBiens.filter(function(x){return x.statut==='Disponible';}).length;
+    document.getElementById('statVente').textContent = allBiens.filter(function(x){return x.transaction==='Vente';}).length;
+    document.getElementById('statLocation').textContent = allBiens.filter(function(x){return x.transaction==='Location';}).length;
+    document.getElementById('statusDot').style.background = 'var(--green)';
+    // Quartiers
+    var quartiers = allBiens.map(function(b){return b.quartier;}).filter(Boolean);
+    quartiers = quartiers.filter(function(q,i){return quartiers.indexOf(q)===i;}).sort();
+    var sel = document.getElementById('quartierFilter');
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">📍 Tous les quartiers</option>' +
+      quartiers.map(function(q){return '<option value="'+q+'"'+(q===cur?' selected':'')+'>'+q+'</option>';}).join('');
     renderBiens();
   } catch(e) {
-    document.getElementById('statusDot').style.background='var(--red)';
-    toast('Erreur connexion',true);
+    document.getElementById('statusDot').style.background = 'var(--red)';
+    showToast('Erreur connexion', true);
   }
 }
 
 // ── NAVIGATION ────────────────────────────────────
 function showView(name) {
-  document.querySelectorAll('.home-view,.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const el=document.getElementById('view'+name.charAt(0).toUpperCase()+name.slice(1));
-  if(el) el.classList.add('active');
-  const nav=document.getElementById('nav-'+name);
-  if(nav) nav.classList.add('active');
-  document.getElementById('appContent').scrollTop=0;
+  var views = document.querySelectorAll('.home-view, .view');
+  views.forEach(function(v){v.classList.remove('active');});
+  var navBtns = document.querySelectorAll('.nav-btn');
+  navBtns.forEach(function(b){b.classList.remove('active');});
+  var el = document.getElementById('view' + name.charAt(0).toUpperCase() + name.slice(1));
+  if (el) el.classList.add('active');
+  var nav = document.getElementById('nav-' + name);
+  if (nav) nav.classList.add('active');
+  document.getElementById('appContent').scrollTop = 0;
 }
+
 function goToImport() {
-  importPhotos=[];
-  const it=document.getElementById('importText');if(it)it.value='';
-  document.getElementById('warningBox').style.display='none';
-  document.getElementById('importPhotosGrid').innerHTML='';
+  importPhotos = [];
+  var it = document.getElementById('importText');
+  if (it) it.value = '';
+  document.getElementById('warningBox').style.display = 'none';
+  document.getElementById('importPhotosGrid').innerHTML = '';
   showIStep(1);
   showView('import');
   document.getElementById('nav-import').classList.add('active');
 }
-function showIStep(n){
-  [1,11,2,3].forEach(i=>{
-    const el=document.getElementById('istep'+i);
-    if(el) el.classList.toggle('active',i===n);
+
+function showIStep(n) {
+  [1, 11, 2, 3].forEach(function(i) {
+    var el = document.getElementById('istep' + i);
+    if (el) el.classList.toggle('active', i === n);
   });
+}
+
+function openManual() {
+  importPhotos = [];
+  document.getElementById('importPhotosGrid').innerHTML = '';
+  document.getElementById('warningBox').style.display = 'none';
+  var empty = {reference:'',nom:'',transaction:'Location',type_bien:'Villa',quartier:'',prix:'',
+    surface_hab:'',surface_terrain:'',chambres:'',salles_de_bain:'',garage:false,jardin:false,
+    piscine:false,sous_sol:false,statut:'Disponible',disponibilite:'',description:''};
+  document.getElementById('reviewFields').innerHTML = buildFormHTML(empty);
+  showIStep(3);
 }
 
 // ── IMPORT PHOTOS ─────────────────────────────────
 function handleImportPhotos(files) {
-  for(const f of files){
-    const reader=new FileReader();
-    reader.onload=ev=>{importPhotos.push({file:f,preview:ev.target.result});renderImportPhotos();};
-    reader.readAsDataURL(f);
+  for (var i = 0; i < files.length; i++) {
+    (function(f) {
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        importPhotos.push({file: f, preview: ev.target.result});
+        renderImportPhotos();
+      };
+      reader.readAsDataURL(f);
+    })(files[i]);
   }
 }
+
 function renderImportPhotos() {
-  document.getElementById('importPhotosGrid').innerHTML=importPhotos.map((p,i)=>`
-    <div class="photo-item ${i===0?'primary':''}">
-      ${i===0?'<div class="primary-badge">★</div>':''}
-      <img src="${p.preview}" onclick="openLightbox('${p.preview}')">
-      <button class="photo-del" onclick="removeImportPhoto(${i})">✕</button>
-      ${i!==0?`<button class="photo-star" onclick="setImportPrimary(${i})">★ Principal</button>`:''}
-    </div>`).join('');
+  document.getElementById('importPhotosGrid').innerHTML = importPhotos.map(function(p, i) {
+    return '<div class="photo-item' + (i===0?' primary':'') + '">' +
+      (i===0?'<div class="primary-badge">★</div>':'') +
+      '<img src="' + p.preview + '" onclick="openLightbox(\'' + p.preview + '\')">' +
+      '<button class="photo-del" onclick="removeImportPhoto(' + i + ')">✕</button>' +
+      (i!==0?'<button class="photo-star" onclick="setImportPrimary(' + i + ')">★ Principal</button>':'') +
+      '</div>';
+  }).join('');
 }
-function removeImportPhoto(i){importPhotos.splice(i,1);renderImportPhotos();}
-function setImportPrimary(i){const m=importPhotos.splice(i,1)[0];importPhotos.unshift(m);renderImportPhotos();}
+
+function removeImportPhoto(i) { importPhotos.splice(i, 1); renderImportPhotos(); }
+function setImportPrimary(i) { var m = importPhotos.splice(i, 1)[0]; importPhotos.unshift(m); renderImportPhotos(); }
 
 // ── CLAUDE ANALYSE ────────────────────────────────
 async function analyzeText() {
-  const text=document.getElementById('importText').value.trim();
-  if(!text){toast('Colle une description',true);return;}
-  showIStep(2); // from istep11
-  const PROMPT=`Tu es un assistant spécialisé en immobilier marocain. Analyse ce texte et extrais les informations.
-IMPORTANT: Pour "description", copie le texte ORIGINAL exactement avec tous les emojis et retours à la ligne. Mets null pour tout champ non clairement indiqué. Ne devine jamais.
-Réponds UNIQUEMENT en JSON valide:
-{"reference":null,"nom":"string","transaction":"Vente ou Location","type_bien":"Villa ou Appartement ou Penthouse ou Riad ou Terrain ou Local commercial","quartier":null,"prix":null,"surface_hab":null,"surface_terrain":null,"chambres":null,"salles_de_bain":null,"garage":false,"jardin":false,"piscine":false,"sous_sol":false,"statut":"Disponible","disponibilite":null,"description":"texte original","champs_manquants":[]}
-Texte:\n${text}`;
+  var text = document.getElementById('importText').value.trim();
+  if (!text) { showToast('Colle une description', true); return; }
+  showIStep(2);
+  var PROMPT = 'Tu es un assistant spécialisé en immobilier marocain. Analyse ce texte et extrais les informations.\n' +
+    'IMPORTANT: Pour "description", copie le texte ORIGINAL exactement avec tous les emojis et retours à la ligne.\n' +
+    'Pour les chambres : additionne toutes les chambres mentionnées dans les différents étages.\n' +
+    'Mets null pour tout champ non clairement indiqué. Ne devine jamais.\n' +
+    'Réponds UNIQUEMENT en JSON valide:\n' +
+    '{"reference":null,"nom":"string","transaction":"Vente ou Location","type_bien":"Villa ou Appartement ou Penthouse ou Riad ou Terrain ou Local commercial","quartier":null,"prix":null,"surface_hab":null,"surface_terrain":null,"chambres":null,"salles_de_bain":null,"garage":false,"jardin":false,"piscine":false,"sous_sol":false,"statut":"Disponible","disponibilite":null,"description":"texte original","champs_manquants":[]}\n' +
+    'Texte:\n' + text;
   try {
-    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:PROMPT})});
-    if(!res.ok) throw new Error('Erreur worker: '+res.status);
-    const data=await res.json();
-    let json=data.content[0].text.trim();
-    const m=json.match(/\{[\s\S]*\}/);
-    if(!m) throw new Error('Réponse invalide');
-    const d=JSON.parse(m[0]);
-    if(!d.reference){
-      const pfx=d.transaction==='Vente'?'VNT':'RLV';
-      const q=(d.quartier||'XX').substring(0,3).toUpperCase().replace(/\s/g,'');
-      d.reference=`${pfx}-${q}-${Date.now().toString().slice(-4)}`;
+    var res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({text: PROMPT})
+    });
+    if (!res.ok) throw new Error('Erreur worker: ' + res.status);
+    var data = await res.json();
+    var json = data.content[0].text.trim();
+    var m = json.match(/\{[\s\S]*\}/);
+    if (!m) throw new Error('Réponse invalide');
+    var d = JSON.parse(m[0]);
+    if (!d.reference) {
+      var pfx = d.transaction === 'Vente' ? 'VNT' : 'RLV';
+      var q = (d.quartier || 'XX').substring(0, 3).toUpperCase().replace(/\s/g, '');
+      d.reference = pfx + '-' + q + '-' + Date.now().toString().slice(-4);
     }
-    showReview(d,'reviewFields','warningBox','warningText');
+    if (d.champs_manquants && d.champs_manquants.length) {
+      document.getElementById('warningBox').style.display = 'block';
+      document.getElementById('warningText').textContent = ' Manquants : ' + d.champs_manquants.join(', ');
+    }
+    document.getElementById('reviewFields').innerHTML = buildFormHTML(d);
     showIStep(3);
-  } catch(e){showIStep(1);toast('Erreur : '+e.message,true);}
+  } catch(e) {
+    showIStep(11);
+    showToast('Erreur : ' + e.message, true);
+  }
 }
 
 function buildFormHTML(d) {
-  return `
-    <div class="form-field"><label>Référence</label><input id="rRef" value="${d.reference||''}" oninput="markDirty()"></div>
-    <div class="form-field"><label>Nom</label><input id="rNom" value="${d.nom||''}" oninput="markDirty()"></div>
-    <div class="form-field"><label>Transaction</label>
-      <select id="rTrans"><option ${d.transaction==='Vente'?'selected':''}>Vente</option><option ${d.transaction==='Location'?'selected':''}>Location</option></select>
-    </div>
-    <div class="form-field"><label>Type</label>
-      <select id="rType">${['Villa','Appartement','Penthouse','Riad','Terrain','Local commercial'].map(t=>`<option ${d.type_bien===t?'selected':''}>${t}</option>`).join('')}</select>
-    </div>
-    <div class="form-field"><label>Quartier</label><input id="rQuartier" value="${d.quartier||''}"></div>
-    <div class="form-field"><label>Prix (MAD)</label><input id="rPrix" type="number" value="${d.prix||''}"></div>
-    <div class="form-field"><label>Surface hab. (m²)</label><input id="rSurface" type="number" value="${d.surface_hab||''}"></div>
-    <div class="form-field"><label>Surface terrain (m²)</label><input id="rTerrain" type="number" value="${d.surface_terrain||''}"></div>
-    <div class="form-field"><label>Chambres</label><input id="rChambres" type="number" value="${d.chambres||''}"></div>
-    <div class="form-field"><label>Salles de bain</label><input id="rSdb" type="number" value="${d.salles_de_bain||''}"></div>
-    <div class="form-field"><label>Statut</label>
-      <select id="rStatut"><option ${d.statut==='Disponible'?'selected':''}>Disponible</option><option ${d.statut==='Loué'?'selected':''}>Loué</option><option ${d.statut==='Vendu'?'selected':''}>Vendu</option><option ${d.statut==='Sous compromis'?'selected':''}>Sous compromis</option></select>
-    </div>
-    <div class="form-field"><label>Disponibilité</label><input id="rDispo" value="${d.disponibilite||''}"></div>
-    <div class="form-field"><label>Équipements</label>
-      <div class="form-checks">
-        <label class="check-item"><input type="checkbox" id="rGarage" ${d.garage?'checked':''}> 🚗 Garage</label>
-        <label class="check-item"><input type="checkbox" id="rJardin" ${d.jardin?'checked':''}> 🌿 Jardin</label>
-        <label class="check-item"><input type="checkbox" id="rPiscine" ${d.piscine?'checked':''}> 🏊 Piscine</label>
-        <label class="check-item"><input type="checkbox" id="rSousSol" ${d.sous_sol?'checked':''}> 🏗 Sous-sol</label>
-      </div>
-    </div>
-    <div class="form-field"><label>Description</label>
-      <textarea id="rDesc">${(d.description||'').replace(/</g,'&lt;')}</textarea>
-    </div>`;
-}
-
-function showReview(d,fieldsId,warnId,warnTextId) {
-  if(warnId&&d.champs_manquants&&d.champs_manquants.length){
-    document.getElementById(warnId).style.display='block';
-    document.getElementById(warnTextId).textContent=' Manquants : '+d.champs_manquants.join(', ');
-  }
-  document.getElementById(fieldsId).innerHTML=buildFormHTML(d);
+  var types = ['Villa','Appartement','Penthouse','Riad','Terrain','Local commercial'];
+  var statuts = ['Disponible','Loué','Vendu','Sous compromis'];
+  return '<div class="form-field"><label>Référence</label><input id="rRef" value="'+(d.reference||'')+'" oninput="markDirty()"></div>' +
+    '<div class="form-field"><label>Nom</label><input id="rNom" value="'+(d.nom||'')+'" oninput="markDirty()"></div>' +
+    '<div class="form-field"><label>Transaction</label><select id="rTrans" onchange="markDirty()"><option'+(d.transaction==='Vente'?' selected':'')+'>Vente</option><option'+(d.transaction==='Location'?' selected':'')+'>Location</option></select></div>' +
+    '<div class="form-field"><label>Type</label><select id="rType" onchange="markDirty()">'+types.map(function(t){return '<option'+(d.type_bien===t?' selected':'')+'>'+t+'</option>';}).join('')+'</select></div>' +
+    '<div class="form-field"><label>Quartier</label><input id="rQuartier" value="'+(d.quartier||'')+'" oninput="markDirty()"></div>' +
+    '<div class="form-field"><label>Prix (MAD)</label><input id="rPrix" type="number" value="'+(d.prix||'')+'" oninput="markDirty()"></div>' +
+    '<div class="form-field"><label>Surface hab. (m²)</label><input id="rSurface" type="number" value="'+(d.surface_hab||'')+'" oninput="markDirty()"></div>' +
+    '<div class="form-field"><label>Surface terrain (m²)</label><input id="rTerrain" type="number" value="'+(d.surface_terrain||'')+'" oninput="markDirty()"></div>' +
+    '<div class="form-field"><label>Chambres</label><input id="rChambres" type="number" value="'+(d.chambres||'')+'" oninput="markDirty()"></div>' +
+    '<div class="form-field"><label>Salles de bain</label><input id="rSdb" type="number" value="'+(d.salles_de_bain||'')+'" oninput="markDirty()"></div>' +
+    '<div class="form-field"><label>Statut</label><select id="rStatut" onchange="markDirty()">'+statuts.map(function(s){return '<option'+(d.statut===s?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>' +
+    '<div class="form-field"><label>Disponibilité</label><input id="rDispo" value="'+(d.disponibilite||'')+'" oninput="markDirty()"></div>' +
+    '<div class="form-field"><label>Équipements</label><div class="form-checks">' +
+    '<label class="check-item"><input type="checkbox" id="rGarage"'+(d.garage?' checked':'')+' onchange="markDirty()"> 🚗 Garage</label>' +
+    '<label class="check-item"><input type="checkbox" id="rJardin"'+(d.jardin?' checked':'')+' onchange="markDirty()"> 🌿 Jardin</label>' +
+    '<label class="check-item"><input type="checkbox" id="rPiscine"'+(d.piscine?' checked':'')+' onchange="markDirty()"> 🏊 Piscine</label>' +
+    '<label class="check-item"><input type="checkbox" id="rSousSol"'+(d.sous_sol?' checked':'')+' onchange="markDirty()"> 🏗 Sous-sol</label>' +
+    '</div></div>' +
+    '<div class="form-field"><label>Description</label><textarea id="rDesc" oninput="markDirty()">'+(d.description||'').replace(/</g,'&lt;')+'</textarea></div>';
 }
 
 function getFormData() {
   return {
-    reference:document.getElementById('rRef').value.trim(),
-    nom:document.getElementById('rNom').value.trim(),
-    transaction:document.getElementById('rTrans').value,
-    type_bien:document.getElementById('rType').value,
-    quartier:document.getElementById('rQuartier').value.trim(),
-    prix:parseFloat(document.getElementById('rPrix').value)||null,
-    surface_hab:parseFloat(document.getElementById('rSurface').value)||null,
-    surface_terrain:parseFloat(document.getElementById('rTerrain').value)||null,
-    chambres:parseInt(document.getElementById('rChambres').value)||null,
-    salles_de_bain:parseInt(document.getElementById('rSdb').value)||null,
-    garage:document.getElementById('rGarage').checked,
-    jardin:document.getElementById('rJardin').checked,
-    piscine:document.getElementById('rPiscine').checked,
-    sous_sol:document.getElementById('rSousSol').checked,
-    statut:document.getElementById('rStatut').value,
-    disponibilite:document.getElementById('rDispo').value.trim(),
-    description:document.getElementById('rDesc').value.trim()
+    reference: document.getElementById('rRef').value.trim(),
+    nom: document.getElementById('rNom').value.trim(),
+    transaction: document.getElementById('rTrans').value,
+    type_bien: document.getElementById('rType').value,
+    quartier: document.getElementById('rQuartier').value.trim(),
+    prix: parseFloat(document.getElementById('rPrix').value) || null,
+    surface_hab: parseFloat(document.getElementById('rSurface').value) || null,
+    surface_terrain: parseFloat(document.getElementById('rTerrain').value) || null,
+    chambres: parseInt(document.getElementById('rChambres').value) || null,
+    salles_de_bain: parseInt(document.getElementById('rSdb').value) || null,
+    garage: document.getElementById('rGarage').checked,
+    jardin: document.getElementById('rJardin').checked,
+    piscine: document.getElementById('rPiscine').checked,
+    sous_sol: document.getElementById('rSousSol').checked,
+    statut: document.getElementById('rStatut').value,
+    disponibilite: document.getElementById('rDispo').value.trim(),
+    description: document.getElementById('rDesc').value.trim()
   };
 }
 
 async function saveImported() {
-  const data=getFormData();
-  if(!data.reference||!data.nom||!data.transaction||!data.quartier){toast('Champs obligatoires manquants',true);return;}
+  var data = getFormData();
+  if (!data.reference || !data.nom || !data.transaction || !data.quartier) {
+    showToast('Champs obligatoires manquants', true); return;
+  }
   try {
-    const ins=await fetch(SUPABASE_URL+'/rest/v1/biens',{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(data)});
-    if(!ins.ok) throw new Error(await ins.text());
-    const [newBien]=await ins.json();
-    if(importPhotos.length){
-      toast(`Upload ${importPhotos.length} photo(s)...`);
-      for(let i=0;i<importPhotos.length;i++){
-        try{const c=await compress(importPhotos[i].file);await uploadPhoto(c,newBien.id,i);}catch(e){console.error(e);}
+    var ins = await fetch(SUPABASE_URL + '/rest/v1/biens', {
+      method: 'POST',
+      headers: Object.assign({}, SB_H, {'Prefer': 'return=representation'}),
+      body: JSON.stringify(data)
+    });
+    if (!ins.ok) throw new Error(await ins.text());
+    var newBien = (await ins.json())[0];
+    if (importPhotos.length) {
+      showToast('Upload ' + importPhotos.length + ' photo(s)...');
+      for (var i = 0; i < importPhotos.length; i++) {
+        try { var c = await compress(importPhotos[i].file); await uploadPhoto(c, newBien.id, i); } catch(e) {}
       }
     }
-    toast('Bien ajouté ✓');
-    await 
-
-// ── DELETE ───────────────────────────────────────
-let deleteBienId = null;
-
-function askDelete(id, nom) {
-  deleteBienId = id;
-  document.getElementById('confirmText').textContent = nom || 'Ce bien sera définitivement supprimé.';
-  const overlay = document.getElementById('confirmOverlay');
-  overlay.style.display = 'flex';
-  overlay.style.pointerEvents = 'all';
-}
-function closeConfirm() {
-  const overlay = document.getElementById('confirmOverlay');
-  overlay.style.display = 'none';
-  overlay.style.pointerEvents = 'none';
-  deleteBienId = null;
-}
-async function confirmDelete() {
-  if(!deleteBienId) return;
-  try {
-    await api('/rest/v1/biens?id=eq.'+deleteBienId, {method:'DELETE'});
-    toast('Bien supprimé ✓');
-    closeConfirm();
+    showToast('Bien ajouté ✓');
     await load();
-  } catch(e) { toast('Erreur : '+e.message, true); }
-}
-document.getElementById('confirmOverlay').addEventListener('click', function(e){
-  if(e.target===this) closeConfirm();
-});
-
-// ── PULL TO REFRESH ──────────────────────────────
-(function(){
-  let sy=0, moved=false;
-  document.addEventListener('touchstart',e=>{
-    sy=e.touches[0].clientY;
-    moved=false;
-  },{passive:true});
-  document.addEventListener('touchmove',e=>{
-    if(e.touches[0].clientY - sy > 5) moved=true;
-  },{passive:true});
-  document.addEventListener('touchend',async e=>{
-    if(!moved) return;
-    const dy = e.changedTouches[0].clientY - sy;
-    const el = document.getElementById('appContent');
-    const atTop = el.scrollTop <= 0;
-    const onHome = document.getElementById('viewHome').classList.contains('active');
-    if(dy > 80 && (atTop || onHome)){
-      const t=document.getElementById('toast');
-      t.textContent='⟳ Actualisation...';
-      t.className='toast';
-      t.classList.add('show');
-      await load();
-      t.textContent='✅ Actualisé';
-      setTimeout(()=>t.classList.remove('show'),2000);
-    }
-    moved=false;
-  },{passive:true});
-})();
-
-load();
     showView('home');
-  } catch(e){toast('Erreur : '+e.message,true);}
+  } catch(e) { showToast('Erreur : ' + e.message, true); }
 }
 
 // ── MODIFIER ──────────────────────────────────────
 function markDirty() {
-  document.getElementById('editSaveBar').style.display='block';
+  var bar = document.getElementById('editSaveBar');
+  if (bar) bar.style.display = 'block';
 }
 
 function openEdit(bienId) {
-  const b=allBiens.find(x=>x.id===bienId);
-  if(!b) return;
-  document.getElementById('editBienId').value=bienId;
-  document.getElementById('editTitle').textContent=b.nom||'Modifier le bien';
-  editPhotos=allPhotos.filter(p=>p.bien_id===bienId).map(p=>({...p,isExisting:true}));
-  document.getElementById('editSaveBar').style.display='none';
-  document.getElementById('editFields').innerHTML=buildFormHTML({
-    reference:b.reference,nom:b.nom,transaction:b.transaction,type_bien:b.type_bien,
-    quartier:b.quartier,prix:b.prix,surface_hab:b.surface_hab,surface_terrain:b.surface_terrain,
-    chambres:b.chambres,salles_de_bain:b.salles_de_bain,garage:b.garage,jardin:b.jardin,
-    piscine:b.piscine,sous_sol:b.sous_sol,statut:b.statut,disponibilite:b.disponibilite,description:b.description
+  var b = allBiens.find(function(x){return x.id===bienId;});
+  if (!b) return;
+  document.getElementById('editBienId').value = bienId;
+  document.getElementById('editTitle').textContent = b.nom || 'Modifier le bien';
+  editPhotos = allPhotos.filter(function(p){return p.bien_id===bienId;}).map(function(p){return Object.assign({}, p, {isExisting:true});});
+  document.getElementById('editSaveBar').style.display = 'none';
+  document.getElementById('editFields').innerHTML = buildFormHTML({
+    reference:b.reference, nom:b.nom, transaction:b.transaction, type_bien:b.type_bien,
+    quartier:b.quartier, prix:b.prix, surface_hab:b.surface_hab, surface_terrain:b.surface_terrain,
+    chambres:b.chambres, salles_de_bain:b.salles_de_bain, garage:b.garage, jardin:b.jardin,
+    piscine:b.piscine, sous_sol:b.sous_sol, statut:b.statut, disponibilite:b.disponibilite, description:b.description
   });
   renderEditPhotos();
   showView('modifier');
 }
 
 function handleEditPhotos(files) {
-  for(const f of files){
-    const reader=new FileReader();
-    reader.onload=ev=>{editPhotos.push({file:f,preview:ev.target.result,isExisting:false});renderEditPhotos();};
-    reader.readAsDataURL(f);
+  for (var i = 0; i < files.length; i++) {
+    (function(f) {
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        editPhotos.push({file:f, preview:ev.target.result, isExisting:false});
+        renderEditPhotos();
+        markDirty();
+      };
+      reader.readAsDataURL(f);
+    })(files[i]);
   }
 }
+
 function renderEditPhotos() {
-  markDirty();
-  const grid=document.getElementById('editPhotosGrid');
-  if(!editPhotos.length){grid.innerHTML='<p style="font-size:0.8rem;color:var(--mid);text-align:center;padding:8px">Aucune photo</p>';return;}
-  grid.innerHTML=editPhotos.map((p,i)=>`
-    <div class="photo-item ${i===0?'primary':''}">
-      ${i===0?'<div class="primary-badge">★</div>':''}
-      <img src="${p.isExisting?p.url:p.preview}" onclick="openLightbox('${p.isExisting?p.url:p.preview}')">
-      <button class="photo-del" onclick="removeEditPhoto(${i})">✕</button>
-      ${i!==0?`<button class="photo-star" onclick="setEditPrimary(${i})">★ Principal</button>`:''}
-    </div>`).join('');
-}
-function removeEditPhoto(i){editPhotos.splice(i,1);renderEditPhotos();}
-function setEditPrimary(i){const m=editPhotos.splice(i,1)[0];editPhotos.unshift(m);renderEditPhotos();}
-
-async function saveEdit() {
-  const bienId=document.getElementById('editBienId').value;
-  const data=getFormData();
-  if(!data.reference||!data.nom||!data.transaction||!data.quartier){toast('Champs obligatoires manquants',true);return;}
-  try {
-    await api(`/rest/v1/biens?id=eq.${bienId}`,{method:'PATCH',body:JSON.stringify(data),headers:{...H,'Prefer':'return=minimal'}});
-    // Supprimer photos retirées
-    const original=allPhotos.filter(p=>p.bien_id===bienId);
-    const keptIds=editPhotos.filter(p=>p.isExisting).map(p=>p.id);
-    for(const op of original){
-      if(!keptIds.includes(op.id)) await api(`/rest/v1/photos?id=eq.${op.id}`,{method:'DELETE'});
-    }
-    // Mettre à jour ordre existantes
-    for(let i=0;i<editPhotos.length;i++){
-      if(editPhotos[i].isExisting) await api(`/rest/v1/photos?id=eq.${editPhotos[i].id}`,{method:'PATCH',body:JSON.stringify({ordre:i}),headers:{...H,'Prefer':'return=minimal'}});
-    }
-    // Upload nouvelles
-    const newPhotos=editPhotos.filter(p=>!p.isExisting);
-    if(newPhotos.length){
-      toast(`Upload ${newPhotos.length} photo(s)...`);
-      const existingCount=editPhotos.filter(p=>p.isExisting).length;
-      for(let i=0;i<newPhotos.length;i++){
-        try{const c=await compress(newPhotos[i].file);await uploadPhoto(c,bienId,existingCount+i);}catch(e){console.error(e);}
-      }
-    }
-    document.getElementById('editSaveBar').style.display='none';
-    await load();
-    toast('✅ Modifications enregistrées !');
-    setTimeout(()=>showView('biens'), 800);
-  } catch(e){toast('Erreur : '+e.message,true);}
-}
-
-// ── MANUAL ADD ───────────────────────────────────
-function openManual() {
-  const empty = {reference:'',nom:'',transaction:'Location',type_bien:'Villa',quartier:'',prix:'',
-    surface_hab:'',surface_terrain:'',chambres:'',salles_de_bain:'',garage:false,jardin:false,
-    piscine:false,sous_sol:false,statut:'Disponible',disponibilite:'',description:''};
-  importPhotos=[];
-  document.getElementById('importPhotosGrid').innerHTML='';
-  document.getElementById('warningBox').style.display='none';
-  document.getElementById('reviewFields').innerHTML=buildFormHTML(empty);
-  showIStep(3);
-}
-
-// ── BIENS LIST ────────────────────────────────────
-function renderBiens() {
-  const q=(document.getElementById('biensSearch')||{value:''}).value.toLowerCase();
-  const quartier=(document.getElementById('quartierFilter')||{value:''}).value;
-  const filtered=allBiens.filter(b=>{
-    if(activeFilter==='all') {}
-    else if(activeFilter==='Vente' && b.transaction!=='Vente') return false;
-    else if(activeFilter==='Location' && b.transaction!=='Location') return false;
-    else if(activeFilter==='piscine' && !b.piscine) return false;
-    else if(activeFilter==='garage' && !b.garage) return false;
-    else if(activeFilter==='jardin' && !b.jardin) return false;
-    if(quartier && b.quartier!==quartier) return false;
-    if(q && !(''+b.reference+' '+b.nom+' '+b.quartier).toLowerCase().includes(q)) return false;
-    return true;
-  });
-  const list=document.getElementById('biensList');
-  if(!filtered.length){list.innerHTML='<div class="no-biens"><h3>Aucun bien trouvé</h3></div>';return;}
-  list.innerHTML=filtered.map(b=>{
-    const photos=allPhotos.filter(p=>p.bien_id===b.id);
-    const mainPhoto=photos[0]?.url;
-    const prix=b.transaction==='Location'?(b.prix||0).toLocaleString('fr-FR')+' / mois':(b.prix||0).toLocaleString('fr-FR');
-    const ficheUrl=`${BASE_URL}/fiche.html?id=${encodeURIComponent(b.reference)}`;
-    return `<div class="bien-card">
-      <div class="bien-card-img" style="${mainPhoto?`background-image:url('${mainPhoto}')`:''}">
-        ${!mainPhoto?'<div class="bien-card-img-placeholder">🏠</div>':''}
-        <span class="bien-badge bien-badge-${b.transaction.toLowerCase()}">${b.transaction}</span>
-      </div>
-      <div class="bien-card-body">
-        <div class="bien-card-ref">${b.reference||''}</div>
-        <div class="bien-card-title">${b.nom||''}</div>
-        <div class="bien-card-price">${prix} MAD</div>
-        <div class="bien-card-tags">
-          ${b.quartier?`<span class="tag">📍 ${b.quartier}</span>`:''}
-          ${b.surface_hab?`<span class="tag">📐 ${b.surface_hab} m²</span>`:''}
-          ${b.chambres?`<span class="tag">🛏 ${b.chambres} ch.</span>`:''}
-        </div>
-        <div class="bien-card-actions">
-          <button class="btn-action btn-partager" onclick="partager('${ficheUrl}',this)">🔗 Partager</button>
-          <a href="${ficheUrl}" target="_blank" class="btn-action btn-voir">👁 Voir</a>
-          <button class="btn-action btn-modifier" onclick="openEdit('${b.id}')">✏️</button>
-          <button class="btn-action btn-supprimer" onclick="askDelete('${b.id}','${b.nom}')">🗑</button>
-        </div>
-      </div>
-    </div>`;
+  var grid = document.getElementById('editPhotosGrid');
+  if (!editPhotos.length) {
+    grid.innerHTML = '<p style="font-size:0.8rem;color:var(--mid);text-align:center;padding:8px">Aucune photo</p>';
+    return;
+  }
+  grid.innerHTML = editPhotos.map(function(p, i) {
+    var src = p.isExisting ? p.url : p.preview;
+    return '<div class="photo-item' + (i===0?' primary':'') + '">' +
+      (i===0?'<div class="primary-badge">★</div>':'') +
+      '<img src="' + src + '" onclick="openLightbox(\'' + src + '\')">' +
+      '<button class="photo-del" onclick="removeEditPhoto(' + i + ')">✕</button>' +
+      (i!==0?'<button class="photo-star" onclick="setEditPrimary(' + i + ')">★ Principal</button>':'') +
+      '</div>';
   }).join('');
 }
 
-document.querySelectorAll('.filter-chip').forEach(c=>c.addEventListener('click',()=>{
-  document.querySelectorAll('.filter-chip').forEach(x=>x.classList.remove('active'));
-  c.classList.add('active');activeFilter=c.dataset.filter;renderBiens();
-}));
+function removeEditPhoto(i) { editPhotos.splice(i, 1); renderEditPhotos(); markDirty(); }
+function setEditPrimary(i) { var m = editPhotos.splice(i, 1)[0]; editPhotos.unshift(m); renderEditPhotos(); markDirty(); }
 
-function partager(url,btn) {
-  if(navigator.share){navigator.share({title:'Bien immobilier',url}).catch(()=>{});}
-  else {
+async function saveEdit() {
+  var bienId = document.getElementById('editBienId').value;
+  var data = getFormData();
+  if (!data.reference || !data.nom || !data.transaction || !data.quartier) {
+    showToast('Champs obligatoires manquants', true); return;
+  }
+  try {
+    await sbApi('/rest/v1/biens?id=eq.' + bienId, {
+      method: 'PATCH', body: JSON.stringify(data),
+      headers: Object.assign({}, SB_H, {'Prefer': 'return=minimal'})
+    });
+    var original = allPhotos.filter(function(p){return p.bien_id===bienId;});
+    var keptIds = editPhotos.filter(function(p){return p.isExisting;}).map(function(p){return p.id;});
+    for (var i = 0; i < original.length; i++) {
+      if (keptIds.indexOf(original[i].id) === -1) {
+        await sbApi('/rest/v1/photos?id=eq.' + original[i].id, {method: 'DELETE'});
+      }
+    }
+    for (var j = 0; j < editPhotos.length; j++) {
+      if (editPhotos[j].isExisting) {
+        await sbApi('/rest/v1/photos?id=eq.' + editPhotos[j].id, {
+          method: 'PATCH', body: JSON.stringify({ordre: j}),
+          headers: Object.assign({}, SB_H, {'Prefer': 'return=minimal'})
+        });
+      }
+    }
+    var newPhotos = editPhotos.filter(function(p){return !p.isExisting;});
+    var existingCount = editPhotos.filter(function(p){return p.isExisting;}).length;
+    if (newPhotos.length) {
+      showToast('Upload ' + newPhotos.length + ' photo(s)...');
+      for (var k = 0; k < newPhotos.length; k++) {
+        try { var c = await compress(newPhotos[k].file); await uploadPhoto(c, bienId, existingCount + k); } catch(e) {}
+      }
+    }
+    document.getElementById('editSaveBar').style.display = 'none';
+    await load();
+    showToast('✅ Modifications enregistrées !');
+    setTimeout(function(){showView('biens');}, 800);
+  } catch(e) { showToast('Erreur : ' + e.message, true); }
+}
+
+// ── DELETE ────────────────────────────────────────
+function askDelete(id, nom) {
+  deleteBienId = id;
+  document.getElementById('confirmText').textContent = nom || 'Ce bien sera supprimé.';
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+function closeConfirm() {
+  document.getElementById('confirmOverlay').classList.remove('open');
+  deleteBienId = null;
+}
+async function confirmDelete() {
+  if (!deleteBienId) return;
+  try {
+    await sbApi('/rest/v1/biens?id=eq.' + deleteBienId, {method: 'DELETE'});
+    showToast('Bien supprimé ✓');
+    closeConfirm();
+    await load();
+  } catch(e) { showToast('Erreur : ' + e.message, true); }
+}
+document.getElementById('confirmOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeConfirm();
+});
+
+// ── BIENS LIST ────────────────────────────────────
+function renderBiens() {
+  var q = (document.getElementById('biensSearch').value || '').toLowerCase();
+  var quartier = document.getElementById('quartierFilter').value;
+  var filtered = allBiens.filter(function(b) {
+    if (activeFilter === 'Vente' && b.transaction !== 'Vente') return false;
+    if (activeFilter === 'Location' && b.transaction !== 'Location') return false;
+    if (activeFilter === 'piscine' && !b.piscine) return false;
+    if (activeFilter === 'garage' && !b.garage) return false;
+    if (activeFilter === 'jardin' && !b.jardin) return false;
+    if (quartier && b.quartier !== quartier) return false;
+    if (q && !(b.reference + ' ' + b.nom + ' ' + b.quartier).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  var list = document.getElementById('biensList');
+  if (!filtered.length) {
+    list.innerHTML = '<div class="no-biens"><h3>Aucun bien trouvé</h3></div>';
+    return;
+  }
+  list.innerHTML = filtered.map(function(b) {
+    var photos = allPhotos.filter(function(p){return p.bien_id===b.id;});
+    var mainPhoto = photos[0] ? photos[0].url : null;
+    var prix = b.transaction === 'Location'
+      ? (b.prix||0).toLocaleString('fr-FR') + ' / mois'
+      : (b.prix||0).toLocaleString('fr-FR');
+    var ficheUrl = BASE_URL + '/fiche.html?id=' + encodeURIComponent(b.reference);
+    return '<div class="bien-card">' +
+      '<div class="bien-card-img" style="' + (mainPhoto?'background-image:url(\''+mainPhoto+'\')':'') + '">' +
+      (!mainPhoto?'<div class="bien-card-img-placeholder">🏠</div>':'') +
+      '<span class="bien-badge bien-badge-' + b.transaction.toLowerCase() + '">' + b.transaction + '</span>' +
+      '</div>' +
+      '<div class="bien-card-body">' +
+      '<div class="bien-card-ref">' + (b.reference||'') + '</div>' +
+      '<div class="bien-card-title">' + (b.nom||'') + '</div>' +
+      '<div class="bien-card-price">' + prix + ' MAD</div>' +
+      '<div class="bien-card-tags">' +
+      (b.quartier?'<span class="tag">📍 '+b.quartier+'</span>':'') +
+      (b.surface_hab?'<span class="tag">📐 '+b.surface_hab+' m²</span>':'') +
+      (b.chambres?'<span class="tag">🛏 '+b.chambres+' ch.</span>':'') +
+      '</div>' +
+      '<div class="bien-card-actions">' +
+      '<button class="btn-action btn-partager" onclick="partager(\''+ficheUrl+'\',this)">🔗 Partager</button>' +
+      '<a href="'+ficheUrl+'" target="_blank" class="btn-action btn-voir">👁</a>' +
+      '<button class="btn-action btn-modifier" onclick="openEdit(\''+b.id+'\')">✏️</button>' +
+      '<button class="btn-action btn-supprimer" onclick="askDelete(\''+b.id+'\',\''+((b.nom||'').replace(/'/g,"\\'"))+'\')">🗑</button>' +
+      '</div></div></div>';
+  }).join('');
+}
+
+document.querySelectorAll('.filter-chip').forEach(function(c) {
+  c.addEventListener('click', function() {
+    document.querySelectorAll('.filter-chip').forEach(function(x){x.classList.remove('active');});
+    c.classList.add('active');
+    activeFilter = c.dataset.filter;
+    renderBiens();
+  });
+});
+
+function partager(url, btn) {
+  if (navigator.share) {
+    navigator.share({title: 'Bien immobilier', url: url}).catch(function(){});
+  } else {
     navigator.clipboard.writeText(url);
-    btn.textContent='✅ Copié !';btn.classList.add('copied');
-    setTimeout(()=>{btn.textContent='🔗 Partager';btn.classList.remove('copied');},2500);
+    btn.textContent = '✅ Copié !';
+    btn.classList.add('copied');
+    setTimeout(function(){btn.textContent='🔗 Partager';btn.classList.remove('copied');}, 2500);
   }
 }
 
-function openLightbox(src){
-  const lb=document.getElementById('lightbox');
-  document.getElementById('lightboxImg').src=src;
-  lb.classList.add('open');
-  lb.style.pointerEvents='all';
+// ── LIGHTBOX ──────────────────────────────────────
+function openLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
 }
-function closeLightbox(){
-  const lb=document.getElementById('lightbox');
-  lb.classList.remove('open');
-  lb.style.pointerEvents='none';
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
 }
 
-function toast(msg,err=false){
-  const t=document.getElementById('toast');t.textContent=msg;
-  t.className='toast'+(err?' error':'');t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+// ── TOAST ─────────────────────────────────────────
+function showToast(msg, err) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (err ? ' error' : '');
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');}, 3000);
 }
+
+// ── PULL TO REFRESH ───────────────────────────────
+(function(){
+  var sy = 0, moved = false;
+  document.addEventListener('touchstart', function(e){
+    sy = e.touches[0].clientY;
+    moved = false;
+  }, {passive:true});
+  document.addEventListener('touchmove', function(e){
+    if (e.touches[0].clientY - sy > 5) moved = true;
+  }, {passive:true});
+  document.addEventListener('touchend', async function(e){
+    if (!moved) return;
+    var dy = e.changedTouches[0].clientY - sy;
+    var el = document.getElementById('appContent');
+    var atTop = el.scrollTop <= 0;
+    var onHome = document.getElementById('viewHome').classList.contains('active');
+    if (dy > 80 && (atTop || onHome)) {
+      showToast('⟳ Actualisation...');
+      await load();
+      showToast('✅ Actualisé');
+    }
+    moved = false;
+  }, {passive:true});
+})();
 
 load();
 </script>
