@@ -324,7 +324,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
   <img id="lightboxImg" src="" alt="">
 </div>
 <!-- CONFIRM DELETE MODAL -->
-<div id="confirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300;align-items:center;justify-content:center;padding:20px">
+<div id="confirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300;align-items:center;justify-content:center;padding:20px;pointer-events:none">
   <div style="background:white;border-radius:12px;padding:28px;max-width:320px;width:100%;text-align:center">
     <div style="font-size:2rem;margin-bottom:12px">🗑</div>
     <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:8px">Supprimer ce bien ?</h3>
@@ -565,9 +565,12 @@ function askDelete(id, nom) {
   document.getElementById('confirmText').textContent = nom || 'Ce bien sera définitivement supprimé.';
   const overlay = document.getElementById('confirmOverlay');
   overlay.style.display = 'flex';
+  overlay.style.pointerEvents = 'all';
 }
 function closeConfirm() {
-  document.getElementById('confirmOverlay').style.display = 'none';
+  const overlay = document.getElementById('confirmOverlay');
+  overlay.style.display = 'none';
+  overlay.style.pointerEvents = 'none';
   deleteBienId = null;
 }
 async function confirmDelete() {
