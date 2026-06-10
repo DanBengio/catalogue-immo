@@ -782,7 +782,7 @@ function renderBiens() {
       : (b.prix||0).toLocaleString('fr-FR');
     var ficheUrl = BASE_URL + '/fiche.html?id=' + encodeURIComponent(b.reference);
     return '<div class="bien-card" data-id="' + b.id + '">' +
-      '<div class="bien-card-img" style="' + (mainPhoto?'background-image:url('+JSON.stringify(mainPhoto)+')':'') + '">' +
+      '<div class="bien-card-img" style="' + (mainPhoto?'background-image:url('+mainPhoto+')':'') + '">' +
       (!mainPhoto?'<div class="bien-card-img-placeholder">🏠</div>':'') +
       '<span class="bien-badge bien-badge-' + b.transaction.toLowerCase() + '">' + b.transaction + '</span>' +
       '</div>' +
