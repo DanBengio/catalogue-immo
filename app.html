@@ -135,6 +135,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark)}
 .btn-voir{background:var(--cream);color:var(--dark);border:1px solid var(--border);padding:9px 12px}
 .btn-modifier{background:var(--dark);color:white;padding:9px 12px}
 .btn-supprimer{background:#fce4e4;color:var(--red);border:1px solid #f5c6c6;padding:9px 12px}
+.btn-linkedin{background:#0077b5;color:white;padding:9px 12px}
 .no-biens{text-align:center;padding:60px 20px;color:var(--mid)}
 .no-biens h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:8px;color:var(--dark)}
 
@@ -797,6 +798,7 @@ function renderBiens() {
       '<a href="'+ficheUrl+'" target="_blank" class="btn-action btn-voir">👁</a>' +
       '<button class="btn-action btn-modifier" onclick="openEdit(\''+b.id+'\')">✏️</button>' +
       '<button class="btn-action btn-supprimer" onclick="askDelete(\''+b.id+'\',\''+((b.nom||'').replace(/'/g,"\\'"))+'\')">🗑</button>' +
+      '<button class="btn-action btn-linkedin" onclick="partagerLinkedin(\'' + ficheUrl + '\',' + '\'\'' + (b.nom||'').replace(/\'/g,\"\\\'\") + '\'' + ',' + (b.prix||0) + ',\'' + b.transaction + '\',\'' + (b.quartier||'') + '\')">in</button>' +
       '</div></div></div>';
   }).join('');
 }
@@ -837,6 +839,70 @@ function showToast(msg, err) {
   t.className = 'toast' + (err ? ' error' : '');
   t.classList.add('show');
   setTimeout(function(){t.classList.remove('show');}, 3000);
+}
+
+// ── LINKEDIN SHARE ───────────────────────────────
+async function partagerLinkedin(ficheUrl, nom, prix, transaction, quartier) {
+  showToast('✦ Génération du post LinkedIn...');
+
+  var bienComplet = allBiens.find(function(x){
+    return (BASE_URL + '/fiche.html?id=' + encodeURIComponent(x.reference)) === ficheUrl;
+  });
+
+  var prixFormate = (prix||0).toLocaleString('fr-FR');
+  var suffixe = transaction === 'Location' ? ' MAD / mois' : ' MAD';
+  var surface = bienComplet ? bienComplet.surface_hab : null;
+  var chambres = bienComplet ? bienComplet.chambres : null;
+  var desc = bienComplet ? (bienComplet.description || '').substring(0, 400) : '';
+  var equipements = [];
+  if (bienComplet) {
+    if (bienComplet.piscine) equipements.push('Piscine');
+    if (bienComplet.jardin) equipements.push('Jardin');
+    if (bienComplet.garage) equipements.push('Garage');
+    if (bienComplet.sous_sol) equipements.push('Sous-sol');
+  }
+
+  var prompt = 'Tu es un expert en communication immobilière de luxe au Maroc. ' +
+    'Rédige un post LinkedIn percutant et élégant pour ce bien immobilier. ' +
+    'Commence par une accroche émotionnelle courte (1-2 phrases qui donnent envie), ' +
+    'présente les points forts avec des emojis, termine par les hashtags pertinents. ' +
+    'Ton : professionnel, chaleureux, qui inspire le désir. Maximum 150 mots. ' +
+    'Termine OBLIGATOIREMENT par cette ligne exacte sur une nouvelle ligne : 👉 ' + ficheUrl + '\n\n' +
+    'Infos du bien :\n' +
+    'Nom : ' + nom + '\n' +
+    'Type : ' + (bienComplet ? bienComplet.type_bien : '') + '\n' +
+    'Transaction : ' + transaction + '\n' +
+    'Quartier : ' + quartier + ', Casablanca\n' +
+    'Prix : ' + prixFormate + suffixe + '\n' +
+    (surface ? 'Surface : ' + surface + ' m²\n' : '') +
+    (chambres ? 'Chambres : ' + chambres + '\n' : '') +
+    (equipements.length ? 'Équipements : ' + equipements.join(', ') + '\n' : '') +
+    (desc ? 'Description : ' + desc : '');
+
+  try {
+    var res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({text: prompt})
+    });
+    if (!res.ok) throw new Error('Erreur');
+    var data = await res.json();
+    var texte = data.content[0].text.trim();
+    await navigator.clipboard.writeText(texte);
+    showToast('✅ Post copié ! Ouverture LinkedIn...');
+    setTimeout(function(){ window.open('https://www.linkedin.com/feed/', '_blank'); }, 1200);
+  } catch(e) {
+    var fallback = (transaction === 'Location' ? '🏡' : '🏠') + ' ' + nom + '\n\n' +
+      '📍 ' + quartier + ', Casablanca\n' +
+      '💰 ' + prixFormate + suffixe + '\n' +
+      (surface ? '📐 ' + surface + ' m²' : '') +
+      (chambres ? ' | 🛏 ' + chambres + ' ch.' : '') + '\n\n' +
+      '👉 ' + ficheUrl + '\n\n' +
+      '#Immobilier #Casablanca #' + (quartier||'').replace(/\s+/g,'') + ' #BienImmo #MarocImmo';
+    await navigator.clipboard.writeText(fallback);
+    showToast('Post copié !');
+    setTimeout(function(){ window.open('https://www.linkedin.com/feed/', '_blank'); }, 1000);
+  }
 }
 
 // ── PULL TO REFRESH ───────────────────────────────
