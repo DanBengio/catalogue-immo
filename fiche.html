@@ -173,7 +173,7 @@ function render() {
       ${fields.map(f=>`<div class="info-card"><div class="label">${f.l}</div><div class="value">${f.v}</div></div>`).join('')}
     </div>
     <div class="amenities">
-      ${amenities.map(a=>`<div class="amenity ${a.on?'on':''}">${a.icon} ${a.label}</div>`).join('')}
+      ${amenities.filter(a=>a.on).map(a=>`<div class="amenity on">${a.icon} ${a.label}</div>`).join('')}
     </div>
     ${bien.description ? `<div class="desc-box"><h3>Description</h3><div class="desc-text">${bien.description.replace(/</g,'&lt;')}</div></div>` : ''}
     <div class="footer-note">Pour toute information, contactez votre agent immobilier.</div>
