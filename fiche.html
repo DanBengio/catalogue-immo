@@ -120,7 +120,7 @@ function render() {
   badge.textContent = bien.transaction;
   badge.className = 'badge badge-' + bien.transaction.toLowerCase();
   badge.style.display = 'inline-block';
-  document.getElementById('btnPdf').style.display = 'inline-block';
+
 
   const prix = bien.transaction === 'Location'
     ? (bien.prix||0).toLocaleString('fr-FR') + ' MAD / mois'
