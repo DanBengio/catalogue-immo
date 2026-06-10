@@ -731,8 +731,10 @@ async function saveEdit() {
 }
 
 // ── DELETE ────────────────────────────────────────
-function askDelete(id, nom) {
+function askDelete(id) {
   deleteBienId = id;
+  var b = allBiens.find(function(x){return x.id===id;});
+  var nom = b ? b.nom : '';
   document.getElementById('confirmText').textContent = nom || 'Ce bien sera supprimé.';
   document.getElementById('confirmOverlay').classList.add('open');
 }
@@ -779,8 +781,8 @@ function renderBiens() {
       ? (b.prix||0).toLocaleString('fr-FR') + ' / mois'
       : (b.prix||0).toLocaleString('fr-FR');
     var ficheUrl = BASE_URL + '/fiche.html?id=' + encodeURIComponent(b.reference);
-    return '<div class="bien-card">' +
-      '<div class="bien-card-img" style="' + (mainPhoto?'background-image:url(\''+mainPhoto+'\')':'') + '">' +
+    return '<div class="bien-card" data-id="' + b.id + '">' +
+      '<div class="bien-card-img" style="' + (mainPhoto?'background-image:url('+JSON.stringify(mainPhoto)+')':'') + '">' +
       (!mainPhoto?'<div class="bien-card-img-placeholder">🏠</div>':'') +
       '<span class="bien-badge bien-badge-' + b.transaction.toLowerCase() + '">' + b.transaction + '</span>' +
       '</div>' +
@@ -794,14 +796,36 @@ function renderBiens() {
       (b.chambres?'<span class="tag">🛏 '+b.chambres+' ch.</span>':'') +
       '</div>' +
       '<div class="bien-card-actions">' +
-      '<button class="btn-action btn-partager" onclick="partager(\''+ficheUrl+'\',this)">🔗 Partager</button>' +
-      '<a href="'+ficheUrl+'" target="_blank" class="btn-action btn-voir">👁</a>' +
-      '<button class="btn-action btn-modifier" onclick="openEdit(\''+b.id+'\')">✏️</button>' +
-      '<button class="btn-action btn-supprimer" onclick="askDelete(\''+b.id+'\',\''+((b.nom||'').replace(/'/g,"\\'"))+'\')">🗑</button>' +
-      '<button class="btn-action btn-linkedin" onclick="partagerLinkedin('\" + b.id + "\')">in</button>' +
+      '<button class="btn-action btn-partager" data-fiche="' + ficheUrl + '">🔗 Partager</button>' +
+      '<a href="' + ficheUrl + '" target="_blank" class="btn-action btn-voir">👁</a>' +
+      '<button class="btn-action btn-modifier">✏️</button>' +
+      '<button class="btn-action btn-supprimer">🗑</button>' +
+      '<button class="btn-action btn-linkedin">in</button>' +
       '</div></div></div>';
   }).join('');
 }
+
+// Event delegation for card buttons
+document.getElementById('biensList').addEventListener('click', function(e) {
+  var btn = e.target.closest('button, a');
+  if (!btn) return;
+  var card = btn.closest('.bien-card');
+  if (!card) return;
+  var bienId = card.dataset.id;
+
+  if (btn.classList.contains('btn-partager')) {
+    var url = btn.dataset.fiche;
+    partager(url, btn);
+  } else if (btn.classList.contains('btn-voir')) {
+    // link handled natively
+  } else if (btn.classList.contains('btn-modifier')) {
+    openEdit(bienId);
+  } else if (btn.classList.contains('btn-supprimer')) {
+    askDelete(bienId);
+  } else if (btn.classList.contains('btn-linkedin')) {
+    partagerLinkedin(bienId);
+  }
+});
 
 document.querySelectorAll('.filter-chip').forEach(function(c) {
   c.addEventListener('click', function() {
