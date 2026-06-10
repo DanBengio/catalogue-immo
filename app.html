@@ -798,7 +798,7 @@ function renderBiens() {
       '<a href="'+ficheUrl+'" target="_blank" class="btn-action btn-voir">👁</a>' +
       '<button class="btn-action btn-modifier" onclick="openEdit(\''+b.id+'\')">✏️</button>' +
       '<button class="btn-action btn-supprimer" onclick="askDelete(\''+b.id+'\',\''+((b.nom||'').replace(/'/g,"\\'"))+'\')">🗑</button>' +
-      '<button class="btn-action btn-linkedin" onclick="partagerLinkedin(\'' + ficheUrl + '\',' + '\'\'' + (b.nom||'').replace(/\'/g,\"\\\'\") + '\'' + ',' + (b.prix||0) + ',\'' + b.transaction + '\',\'' + (b.quartier||'') + '\')">in</button>' +
+      '<button class="btn-action btn-linkedin" onclick="partagerLinkedin('\" + b.id + "\')">in</button>' +
       '</div></div></div>';
   }).join('');
 }
@@ -842,12 +842,15 @@ function showToast(msg, err) {
 }
 
 // ── LINKEDIN SHARE ───────────────────────────────
-async function partagerLinkedin(ficheUrl, nom, prix, transaction, quartier) {
+async function partagerLinkedin(bienId) {
+  var bienComplet = allBiens.find(function(x){return x.id===bienId;});
+  if (!bienComplet) { showToast('Bien introuvable', true); return; }
+  var ficheUrl = BASE_URL + '/fiche.html?id=' + encodeURIComponent(bienComplet.reference);
+  var nom = bienComplet.nom || '';
+  var prix = bienComplet.prix || 0;
+  var transaction = bienComplet.transaction || '';
+  var quartier = bienComplet.quartier || '';
   showToast('✦ Génération du post LinkedIn...');
-
-  var bienComplet = allBiens.find(function(x){
-    return (BASE_URL + '/fiche.html?id=' + encodeURIComponent(x.reference)) === ficheUrl;
-  });
 
   var prixFormate = (prix||0).toLocaleString('fr-FR');
   var suffixe = transaction === 'Location' ? ' MAD / mois' : ' MAD';
